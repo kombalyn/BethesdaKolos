@@ -1,0 +1,215 @@
+name: bethesda_2
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.3 <4.0.0'
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  alert_dialog: ^1.0.2
+  assets_audio_player: 
+  audioplayers: ^6.0.0
+  cupertino_icons: ^1.0.8
+  flutter:
+    sdk: flutter
+  flutter_form_builder: 
+  flutter_html: 
+  # flutter_inappwebview: ^6.0.0
+  flutter_screenutil: ^5.9.3
+  flutter_svg: ^2.0.10+1
+  flutter_widget_from_html: 
+  gif: ^2.3.0
+  lottie: ^3.1.2
+  mailer: ^6.1.2
+  permission_handler: ^11.3.1
+  reorderables: ^0.6.0
+  url_launcher: ^6.3.0
+  video_player: ^2.9.1
+  web: 
+  web_socket_channel: ^3.0.1
+  webview_flutter: ^4.8.0
+  #webview_flutter_web: ^0.2.2  # Webes implementáció
+  shared_preferences:  ^2.3.2
+  fl_chart: ^0.69.0
+  #video_player: ^2.8.6
+
+dev_dependencies:
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^2.0.0
+  flutter_test:
+    sdk: flutter
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+# The following section is specific to Flutter packages.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/images/bethesda_logo_nobackground.png
+    - assets/images/bethesda_gyermekkorhaz_logo.png
+    - assets/images/bear.png
+    - assets/images/hatter.jpg
+    - assets/images/fox.png
+    - assets/images/bear_nobackground.png
+    - assets/images/bethesda_white_logo_name.png
+    - assets/images/major_janos.png
+    - assets/images/9tLs.gif
+    - assets/images/ordogikor.png
+    - assets/images/gyakorlat1.jpg
+    - assets/images/gyakorlat2.jpg
+    - assets/images/bethesda_gyerm_logo_nevvel.png
+    - assets/images/bear_up_nobackground.png
+    - assets/images/1icon.png
+    - assets/images/2icon.png
+    - assets/images/3icon.png
+    - assets/images/4icon.png
+    - assets/images/5icon.png
+    - assets/images/6icon.png
+    - assets/images/7icon.png
+
+    - assets/images/fox_nobackground.png
+    - assets/images/fox-horizontal-nobackground.png
+    - assets/images/fox-horizontal-nobackground_2.png
+    - assets/images/ka.png
+    - assets/images/3-4-karkoto.png
+    - assets/images/3-4rainbow.png
+    - assets/images/5-6tengerpart.jpg
+    - assets/images/5-6tengerpart_2.png
+    - assets/images/7-8.png
+    - assets/images/relaxnagy.jpg
+    - assets/images/biztonsagoshely.jpg
+    - assets/images/1icon_b.png
+    - assets/images/2icon_b.png
+    - assets/images/3icon_b.png
+    - assets/images/4icon_b.png
+    - assets/images/5icon_b.png
+    - assets/images/6icon_b.png
+    - assets/images/7icon_b.png
+    - assets/images/szines.png
+    - assets/images/szines-nohatter.png
+    - assets/images/szines_2.png
+    - assets/images/1icon_m.png
+    - assets/images/2icon_m.png
+    - assets/images/3icon_m.png
+    - assets/images/4icon_m.png
+    - assets/images/5icon_m.png
+    - assets/images/6icon_m.png
+    - assets/images/7icon_m.png
+    - assets/images/probaelsohatter.png
+    - assets/images/nyil.json
+    - assets/images/sokszin.svg
+    - assets/images/sokszin.png
+    - assets/images/hatterke.png
+    - assets/images/m3hatter.svg
+    - assets/images/m3hatter_kicsi (2).svg
+    - assets/images/reg.svg
+    - assets/images/logo_bethesda.png
+    - assets/images/logo_sztaki.png
+    - assets/images/logo_elte.png
+    - assets/images/hasi_egészség_illusztracio.jpeg
+    - assets/images/hipnózis_illusztráció.jpeg
+    - assets/images/nyito_oldal_3.jpeg
+    - assets/images/nyito_oldal_4.jpeg
+    - assets/images/nyitokep_2.jpeg
+    - assets/images/relax_illisztracio_3.jpeg
+    - assets/images/relax_illusztráció.jpeg
+    - assets/images/relax_illusztráció_2.jpeg
+    - assets/images/vidam_fiatalok_illusztracio.png
+    - assets/images/nyito_oldal_4_2.png
+    - assets/images/nyitokep_2_2.png
+    - assets/images/dokik.png
+    - assets/images/ordogikor_zold.png
+    - assets/images/1icon_g.png
+    - assets/images/1icon_y.png
+    - assets/images/1icon_b.png
+    - assets/images/1icon_l.png
+    - assets/images/2icon_g.png
+    - assets/images/2icon_y.png
+    - assets/images/2icon_b.png
+    - assets/images/2icon_l.png
+    - assets/images/3icon_g.png
+    - assets/images/3icon_y.png
+    - assets/images/3icon_b.png
+    - assets/images/3icon_l.png
+    - assets/images/4icon_g.png
+    - assets/images/4icon_y.png
+    - assets/images/4icon_b.png
+    - assets/images/4icon_l.png
+    - assets/images/5icon_g.png
+    - assets/images/5icon_y.png
+    - assets/images/5icon_b.png
+    - assets/images/5icon_l.png
+    - assets/images/6icon_g.png
+    - assets/images/6icon_y.png
+    - assets/images/6icon_b.png
+    - assets/images/6icon_l.png
+    - assets/images/7icon_g.png
+    - assets/images/7icon_y.png
+    - assets/images/7icon_b.png
+    - assets/images/7icon_l.png
+    - assets/html/audio_player.html
+    - assets/videos/1_2_het/video_1_1.mp4
+
+
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat/static/Montserrat-Regular.ttf
+  #   - images/a_dot_burr.jpeg
+  #   - images/a_dot_ham.jpeg
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages

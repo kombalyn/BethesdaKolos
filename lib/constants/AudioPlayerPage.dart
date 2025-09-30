@@ -96,7 +96,7 @@ class _AudioControlsState extends State<AudioPlayerPage> {
     print("uzenet elkuldve");
     _channel = WebSocketChannel.connect(
        //Uri.parse('wss://34.72.67.6:8089'),
-        Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
+        Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
      );
 
     //_channel.sink.add("megnezte|ABCDE,mp3_3") ;

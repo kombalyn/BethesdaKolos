@@ -9,6 +9,14 @@ class QuizProvider2 with ChangeNotifier {
   List<String> previousAnswers =
       []; // Add this property to store previous answers
 
+  void previousQuestion() {
+    if (_currentQuestionIndex > 0) {
+      _currentQuestionIndex--;
+      notifyListeners();
+    }
+  }
+
+
   // Method to save answers from question 4.1 (index 14)
   void savePreviousAnswers(List<String> answers) {
     previousAnswers = answers;
@@ -25,13 +33,13 @@ class QuizProvider2 with ChangeNotifier {
         Answer(
           nextQuestionIndex: 1,
           isVideo: true,
-          video: 'majdvalami',
+          video: 'https://storage.googleapis.com/lomeeibucket/harmadik_he%CC%81t_1_uj.mp4',
         ),
         // Provide the video URL here
       ],
     ),
     Question(
-      text: '1. kérdés: Hogy haladsz a programoddal?',
+      text: 'Hogy haladsz a programoddal?',
       index: 1,
       requiresTextInput: false,
       requiresRadioOptions: true,
@@ -47,7 +55,7 @@ class QuizProvider2 with ChangeNotifier {
     Question(
       twoColumn: true,
       text:
-          '1.1. kérdés:  Ha még nem kezdtél bele a megvalósításba, semmi gond. Nézzük meg, hogy mi is zajlik most Benned a változással kapcsolatban. \nTöltsd ki kérlek az alábbi táblázatot. A bal oldali oszlopba írd be, hogy milyen előnyökkel jár a számodra, hogy minden úgy maradjon ahogy most. A jobb oldali táblába pedig írd be kérlek, hogy milyen hátrányai vannak annak, ha minden úgy marad, ahogy most.',
+          'Ha még nem kezdtél bele a megvalósításba, semmi gond. Nézzük meg, hogy mi is zajlik most Benned a változással kapcsolatban. \nTöltsd ki kérlek az alábbi táblázatot. A bal oldali oszlopba írd be, hogy milyen előnyökkel jár a számodra, hogy minden úgy maradjon ahogy most. A jobb oldali táblába pedig írd be kérlek, hogy milyen hátrányai vannak annak, ha minden úgy marad, ahogy most.',
       index: 2,
       requiresTextInput: false,
       //columnHeaders: ['Azért jó nekem, hogy ha minden úgy marad ahogy most, mert:', 'Azért lenne rossz, ha minden úgy maradna, ahogy most, mert:'],
@@ -73,7 +81,7 @@ class QuizProvider2 with ChangeNotifier {
     Question(
       twoColumn: true,
       text:
-          '1.2 Kérdés: Köszönöm, a válaszaidat. Most nézzük meg, a korábban kitöltött táblázatodat arról, hogy miért is érné meg neked elkezdeni mozogni. \nEsetleg írnál új példákat? Jutott eszedbe még valami más? Nyugodtan írd hozzá',
+          'Kérdés: Köszönöm, a válaszaidat. Most nézzük meg, a korábban kitöltött táblázatodat arról, hogy miért is érné meg neked elkezdeni mozogni. \nEsetleg írnál új példákat? Jutott eszedbe még valami más? Nyugodtan írd hozzá',
       index: 3,
       requiresTextInput: false,
       oldanswers: true,
@@ -91,7 +99,7 @@ class QuizProvider2 with ChangeNotifier {
     Question(
       twoColumn: false,
       text:
-          '1.3 Kérdés: Mi az, ami miatt most, ebben a pillanatban úgy érzed, hogy megéri elkezdeni megvalósítani a tervedet? Válaszd ki a táblázatból!',
+          'Mi az, ami miatt most, ebben a pillanatban úgy érzed, hogy megéri elkezdeni megvalósítani a tervedet? Válaszd ki a táblázatból!',
       index: 4,
       requiresTextInput: false,
       oldanswers: true,
@@ -102,7 +110,7 @@ class QuizProvider2 with ChangeNotifier {
     ),
     Question(
       twoColumn: false,
-      text: '1.4 Kérdés: Mi segíthet abban, hogy belevágj?',
+      text: 'Mi segíthet abban, hogy belevágj?',
       hasInfoButton: true,
       steptoquestion: 8,
       infoButtonText: 'Ide jönnek tippek',
@@ -121,7 +129,7 @@ class QuizProvider2 with ChangeNotifier {
     Question(
       twoColumn: false,
       text:
-          '1.2.2 Kérdés: Milyen sikerélményeid voltak a mozgás kapcsán? Kérlek írd le pár mondatban.',
+          'Milyen sikerélményeid voltak a mozgás kapcsán? Kérlek írd le pár mondatban.',
       index: 7,
       requiresTextInput: true,
       answers: [],
@@ -134,14 +142,14 @@ class QuizProvider2 with ChangeNotifier {
         Answer(
           nextQuestionIndex: 9,
           isVideo: true,
-          video: 'majdvalami3',
+          video: "https://storage.googleapis.com/lomeeibucket/harmadik_he%CC%81t_2_uj.mp4",
         ),
       ],
     ),
     Question(
       twoColumn: false,
       text:
-          '2.: Te melyik típus vagy inkább, a kitartás miatt elkerülő vagy a félelem miatti elkerülő?',
+          'Te melyik típus vagy inkább, a kitartás miatt elkerülő vagy a félelem miatti elkerülő?',
       index: 9,
       requiresRadioOptions: true,
       radioOptions: [
@@ -158,7 +166,7 @@ class QuizProvider2 with ChangeNotifier {
     Question(
       twoColumn: false,
       text:
-          '2.1: Írj kérlek példákat, hogy mikor kerülted el a mozgást az elmúlt héten!',
+          'Írj kérlek példákat, hogy mikor kerülted el a mozgást az elmúlt héten!',
       index: 10,
       requiresTextInput: true,
       answers: [],
@@ -171,13 +179,13 @@ class QuizProvider2 with ChangeNotifier {
         Answer(
           nextQuestionIndex: 12,
           isVideo: true,
-          video: 'majdvalami3',
+          video: 'https://storage.googleapis.com/lomeeibucket/harmadik_he%CC%81t_3_uj.mp4',
         ),
       ],
     ),
     Question(
       twoColumn: false,
-      text: '3.1 Kérdés: Te hogy alkalmaznád az ütemezést? Tervezd meg!',
+      text: 'Te hogy alkalmaznád az ütemezést? Tervezd meg!',
       index: 12,
       requiresTableBigger: true,
       requiresTextInput: false,
@@ -193,14 +201,14 @@ class QuizProvider2 with ChangeNotifier {
         Answer(
           nextQuestionIndex: 14,
           isVideo: true,
-          video: 'majdvalami4',
+          video: 'https://storage.googleapis.com/lomeeibucket/harmadik_he%CC%81t_4.mp4',
         ),
       ],
     ),
     Question(
       twoColumn: false,
       text:
-          '4.1 Kérdés: Te milyen akadályokat látsz magad előtt? Mi hátráltat a célod megvalósításában?',
+          'Te milyen akadályokat látsz magad előtt? Mi hátráltat a célod megvalósításában?',
       index: 14,
       rankableOptions: [],
       requiresTextInput: false,
@@ -217,13 +225,13 @@ class QuizProvider2 with ChangeNotifier {
         Answer(
           nextQuestionIndex: 16,
           isVideo: true,
-          video: 'majdvalami4',
+          video: 'https://storage.googleapis.com/lomeeibucket/harmadik_he%CC%81t_5.mp4',
         ),
       ],
     ),
     Question(
       text:
-          '5.1 Kérdés: Kérlek írd a felsorolt nehézségek mellé, hogy hogyan fogod megoldani őket, ha szembetalálod velük magad a következő hetek folyamán!',
+          'Kérlek írd a felsorolt nehézségek mellé, hogy hogyan fogod megoldani őket, ha szembetalálod velük magad a következő hetek folyamán!',
       index: 16,
       requiresRanking: true,
       twoColumn: true,
@@ -242,6 +250,14 @@ class QuizProvider2 with ChangeNotifier {
         true
       ], // First column is not fillable, second is fillable
     ),
+    Question(
+      twoColumn: false,
+      text:
+      'Ez a kérdőív véget ért. \n \n Köszönjük a válaszaidat!',
+      index: 17,
+      answers: [],
+      //answers: [Answer(nextQuestionIndex: 27)],
+    ),
   ];
 
   int _currentQuestionIndex = 0;
@@ -253,6 +269,7 @@ class QuizProvider2 with ChangeNotifier {
 
   int get score => _score;
 
+  /*
   void answerQuestion(int nextQuestionIndex) {
     if (nextQuestionIndex <= _questions.length) {
       _currentQuestionIndex = nextQuestionIndex;
@@ -261,6 +278,18 @@ class QuizProvider2 with ChangeNotifier {
     }
     _score++;
     notifyListeners();
+  }
+   */
+  void answerQuestion(int nextQuestionIndex) {
+    if (nextQuestionIndex >= 0 && nextQuestionIndex < _questions.length) {
+      _currentQuestionIndex = nextQuestionIndex;
+      notifyListeners();
+    } else {
+      // Kérdőív vége kezelése
+      _currentQuestionIndex = _questions.length;
+      notifyListeners();
+      // Ide jöhet egy callback vagy navigáció
+    }
   }
 
   void nextQuestion() {

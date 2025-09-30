@@ -114,13 +114,15 @@ class QuizProvider6 with ChangeNotifier {
   int get score => _score;
 
   void answerQuestion(int nextQuestionIndex) {
-    if (nextQuestionIndex <= _questions.length) {
+    if (nextQuestionIndex >= 0 && nextQuestionIndex < _questions.length) {
       _currentQuestionIndex = nextQuestionIndex;
+      notifyListeners();
     } else {
-      _currentQuestionIndex = _questions.length + 1; // Mark as finished
+      // Kérdőív vége kezelése
+      _currentQuestionIndex = _questions.length;
+      notifyListeners();
+      // Ide jöhet egy callback vagy navigáció
     }
-    _score++;
-    notifyListeners();
   }
 
 

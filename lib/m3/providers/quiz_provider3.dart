@@ -46,7 +46,7 @@ class QuizProvider3 with ChangeNotifier {
       index: 2,
       requiresTextInput: false,
       nooption: true,
-      steptoquestion: 6,
+      steptoquestion: 3,
       answers: [],
       twoColumn: false,
     ),
@@ -55,7 +55,7 @@ class QuizProvider3 with ChangeNotifier {
       index: 3,
       requiresTextInput: false,
       nooption: true,
-      steptoquestion: 6,
+      steptoquestion: 4,
       answers: [],
       twoColumn: false, // No d
     ),
@@ -64,26 +64,33 @@ class QuizProvider3 with ChangeNotifier {
       index: 4,
       requiresTextInput: false,
       nooption: true,
-      steptoquestion: 6,
+      steptoquestion: 5,
       answers: [],
       twoColumn: false, // No d
     ),
     Question(
       twoColumn: false,
-      text: '1.1. kérdés: Kérlek írd le, mikor, kivel és mennyit mozogtál az elmúlt héten.',
+      text: 'kérdés: Kérlek írd le, mikor, kivel és mennyit mozogtál az elmúlt héten.',
       index: 5,
-      requiresTableBigger: true,
-      requiresTextInput: false,
-      check: true,
-      extra: true,
+      requiresTextInput: true,
       answers: [],
     ),
-
+    Question(
+      twoColumn: false,
+      text:
+      'Ez a kérdőív véget ért. \n \n Köszönjük a válaszaidat!',
+      index: 6,
+      answers: [],
+      //answers: [Answer(nextQuestionIndex: 27)],
+    ),
 
   ];
 
   int _currentQuestionIndex = 0;
   int _score = 0;
+
+  // History to track navigation for back functionality
+  List<int> _navigationHistory = [];
 
   Question get currentQuestion => _questions[_currentQuestionIndex];
 
@@ -91,19 +98,39 @@ class QuizProvider3 with ChangeNotifier {
 
   int get score => _score;
 
-  void answerQuestion(int nextQuestionIndex) {
-    if (nextQuestionIndex < _questions.length) {
-      _currentQuestionIndex = nextQuestionIndex;
-    } else {
-      _currentQuestionIndex = _questions.length; // Mark as finished
+  // Check if we can go back to previous question
+  bool canGoBack() {
+    return _navigationHistory.isNotEmpty;
+  }
+
+  // Go to previous question
+  void previousQuestion() {
+    if (_navigationHistory.isNotEmpty) {
+      _currentQuestionIndex = _navigationHistory.removeLast();
+      notifyListeners();
     }
-    _score++;
-    notifyListeners();
+  }
+
+  void answerQuestion(int nextQuestionIndex) {
+    if (nextQuestionIndex >= 0 && nextQuestionIndex < _questions.length) {
+      // Save current index to history before navigating
+      _navigationHistory.add(_currentQuestionIndex);
+      _currentQuestionIndex = nextQuestionIndex;
+      notifyListeners();
+    } else {
+      // Kérdőív vége kezelése
+      _currentQuestionIndex = _questions.length;
+      notifyListeners();
+      // Ide jöhet egy callback vagy navigáció
+    }
   }
 
   void nextQuestion() {
     // Get the current question
     Question currentQuestion = _questions[_currentQuestionIndex];
+
+    // Save current index to history before navigating
+    _navigationHistory.add(_currentQuestionIndex);
 
     // Check if the current question has a 'steptoquestion' defined
     if (currentQuestion.steptoquestion != -1 && currentQuestion.steptoquestion < _questions.length) {
@@ -124,6 +151,7 @@ class QuizProvider3 with ChangeNotifier {
   void resetQuiz() {
     _currentQuestionIndex = 0;
     _score = 0;
+    _navigationHistory.clear();
     notifyListeners();
   }
 

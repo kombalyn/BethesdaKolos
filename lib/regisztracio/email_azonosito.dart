@@ -53,7 +53,8 @@ class HomePageWidgetEmail extends StatefulWidget {
 
 class _HomePageWidgetEmailState extends State<HomePageWidgetEmail> {
   late WebSocketChannel _channel = WebSocketChannel.connect(
-    Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
+    //Uri.parse('wss://prohuman.ddns.net:8089'),
+    Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
   );
 
   int gombnyomva=0;
@@ -519,14 +520,12 @@ Center (child:
                                                   .textController5?.text;
                                               if (szov2 != null &&
                                                   szov2.contains('@')) {
-                                                print(
-                                                    "regisztracio|$szov2-$szov1,$szov3,$_selectedOption,$szov4,$szov5");
+                                                print("regisztracio|$szov2-$szov1,$szov3,$_selectedOption,$szov4,$szov5");
 
-                                                _channel =
-                                                    WebSocketChannel.connect(
-                                                      Uri.parse(
-                                                          'wss://szerver.hasifajdalomkezeles.hu:8089'),
-                                                    );
+                                                _channel = WebSocketChannel.connect(
+                                                  //Uri.parse('wss://prohuman.ddns.net:8889'),
+                                                  Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
+                                                );
                                                 _channel.sink.add(
                                                     "regisztracio|$szov2-$szov1,$szov3,$_selectedOption,$szov4,$szov5");
                                                 final String message = await _channel
@@ -1065,8 +1064,8 @@ Center (child:
                                                 "regisztracio|$szov2-$szov1,$szov3,$_selectedOption,$szov4,$szov5");
 
                                             _channel = WebSocketChannel.connect(
-                                              Uri.parse(
-                                                  'wss://szerver.hasifajdalomkezeles.hu:8089'),
+                                              //Uri.parse('wss://prohuman.ddns.net:8889'),
+                                              Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
                                             );
                                             _channel.sink.add(
                                                 "regisztracio|$szov2-$szov1,$szov3,$_selectedOption,$szov4,$szov5");
@@ -1652,10 +1651,9 @@ Center (child:
                                                  print(
                                                      "regisztracio|$szov2-$szov1,$szov3,$_selectedOption,$szov4,$szov5");
 
-                                                 _channel =
-                                                     WebSocketChannel.connect(
-                                                       Uri.parse(
-                                                           'wss://szerver.hasifajdalomkezeles.hu:8089'),
+                                                 _channel = WebSocketChannel.connect(
+                                                       //Uri.parse('wss://prohuman.ddns.net:8889'),
+                                                        Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
                                                      );
                                                  print("email $szov3");
                                                  _channel.sink.add(

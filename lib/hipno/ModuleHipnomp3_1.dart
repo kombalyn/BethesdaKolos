@@ -14,7 +14,9 @@ export '../home_page_model.dart';
 
 
 class ModuleHipnomp3_1 extends StatelessWidget {
-  const ModuleHipnomp3_1({super.key});
+
+  String Azonosito = '';
+  ModuleHipnomp3_1(String s, {super.key}){Azonosito=s;}
 
   // This widget is the root of your application.
   @override
@@ -40,18 +42,18 @@ class ModuleHipnomp3_1 extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const ModuleHipnoWidget(),
+      home:  ModuleHipnoWidget(Azonosito),
     );
   }
 }
 
 
-
 class ModuleHipnoWidget extends StatefulWidget {
-  const ModuleHipnoWidget({super.key});
+  String Azonosito = '';
+   ModuleHipnoWidget(String s,{super.key}){Azonosito=s;}
 
   @override
-  State<ModuleHipnoWidget> createState() => _ModuleHipnotState();
+  State<ModuleHipnoWidget> createState() => _ModuleHipnotState(Azonosito);
 }
 
 class _ModuleHipnotState extends State<ModuleHipnoWidget> {
@@ -76,6 +78,10 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
 
   //late AssetsAudioPlayer _assetsAudioPlayer;
   String _audioFilePath = 'hanganyag.mp3';
+
+
+  String Azonosito = '';
+  _ModuleHipnotState(String s){Azonosito=s;}
   //double _sliderValue = 0.0;
   //bool _isDraggingSlider = false;
 
@@ -259,7 +265,7 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (BuildContext context) => ModuleHipnomp3_2(),
+                        builder: (BuildContext context) => ModuleHipnomp3_2(Azonosito),
                       ),
                     );
                   },

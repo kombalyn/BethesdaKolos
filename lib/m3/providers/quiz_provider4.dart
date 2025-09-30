@@ -6,10 +6,8 @@ import 'dart:convert';
 
 // 5.hét
 class QuizProvider4 with ChangeNotifier {
-  List<String> previousAnswers =
-      []; // Add this property to store previous answers
+  List<String> previousAnswers = [];
 
-  // Method to save answers from question 4.1 (index 14)
   void savePreviousAnswers(List<String> answers) {
     previousAnswers = answers;
     notifyListeners();
@@ -26,95 +24,141 @@ class QuizProvider4 with ChangeNotifier {
         Answer(
           nextQuestionIndex: 1,
           isVideo: true,
-          video: 'majdvalami',
+          video: 'https://storage.googleapis.com/lomeeibucket/o%CC%88to%CC%88dik_he%CC%81t_1_uj.mp4',
         ),
-        // Provide the video URL here
       ],
     ),
     Question(
-      text: '1. kérdés:  Mi volt az elmúlt pár heted legnagyobb sikere mozgás szempontjából? Mit sikerült megvalósítani a tervedből?',
+      text: 'Mi volt az elmúlt pár heted legnagyobb sikere mozgás szempontjából? Mit sikerült megvalósítani a tervedből?',
       index: 1,
       twoColumn: false,
       requiresTextInput: true,
       answers: [],
     ),
     Question(
-      index: 2,
-      twoColumn: false,
-      text: 'Kérlek, nézd meg ezt a videót!',
+        index: 2,
+        twoColumn: false,
+        text: 'Kérlek, nézd meg ezt a videót!',
         requiresVideo: true,
-
         requiresTextInput: false,
         answers: [
-        Answer(
-        nextQuestionIndex: 3,
-        isVideo: true,
-        video: 'majdvalami', ),]
+          Answer(
+            nextQuestionIndex: 3,
+            isVideo: true,
+            video: 'https://storage.googleapis.com/lomeeibucket/o%CC%88to%CC%88dik_he%CC%81t_2_uj.mp4',
+          ),
+        ]
     ),
     Question(
       twoColumn: false,
-      text:
-          '1.2 Kérdés: Változtatnál valamit a terveden? Növelnéd a gyakoriságot vagy új mozgást hoznál be? Most itt a lehetőség, hogy módosítsd a terved.',
+      text: 'Változtatnál valamit a terveden? Növelnéd a gyakoriságot vagy új mozgást hoznál be? Most itt a lehetőség, hogy módosítsd a terved.',
       index: 3,
       requiresTextInput: false,
       requiresTableBigger: true,
       check: true,
       extra: true,
-        answers: [],
+      answers: [],
+      // Hozzáadjuk a "Semmin sem változtatnék" opciót
+      nooption: true,
+      steptoquestion: 4, // Ugrás a következő kérdésre (index 4)
+    ),
+    Question(
+        twoColumn: false,
+        text: 'Kérlek, nézd meg ezt a videót!',
+        requiresVideo: true,
+        index: 4,
+        requiresTextInput: false,
+        answers: [
+          Answer(
+            nextQuestionIndex: 5,
+            isVideo: true,
+            video: 'https://storage.googleapis.com/lomeeibucket/o%CC%88to%CC%88dik_he%CC%81t_3_uj.mp4',
+          ),
+        ]
     ),
     Question(
       twoColumn: false,
-      text: 'Kérlek, nézd meg ezt a videót!',
-      requiresVideo: true,
-      index: 4,
-      requiresTextInput: false,
-      answers: [
-        Answer(
-          nextQuestionIndex: 5,
-          isVideo: true,
-          video: 'majdvalami', ),]
-    ),
-    Question(
-      twoColumn: false,
-      text: '1.4 Kérdés: Van valami, amit szívesen megosztanál a programmal kapcsolatban? NE tartsd magadban, írd meg nekünk!',
+      text: 'Van valami, amit szívesen megosztanál a programmal kapcsolatban? NE tartsd magadban, írd meg nekünk!',
       index: 5,
       requiresTextInput: true,
       answers: [],
     ),
     Question(
       twoColumn: false,
-      text:
-          'Köszönjük a kitartó munkádat! Hamarosan újra találkozunk. Addig is, mozgásra fel!',
+      text: 'Köszönjük a kitartó munkádat! Hamarosan újra találkozunk. Addig is, mozgásra fel!',
       index: 6,
       requiresTextInput: false,
-      requiresRadioOptions: true, // Enable radio options
+      requiresRadioOptions: true,
       radioOptions: [
         RadioOption(text: 'Mozgásra fel!', nextQuestionIndex: 7),
       ],
-      answers: [],    ),
-
+      answers: [],
+    ),
+    Question(
+      twoColumn: false,
+      text: 'Ez a kérdőív véget ért. \n \n Köszönjük a válaszaidat!',
+      index: 7,
+      answers: [],
+    ),
   ];
 
   int _currentQuestionIndex = 0;
   int _score = 0;
 
-  Question get currentQuestion => _questions[_currentQuestionIndex];
+  // History for back navigation
+  List<int> _navigationHistory = [];
+
+  Question get currentQuestion {
+    if (_currentQuestionIndex < 0 || _currentQuestionIndex >= _questions.length) {
+      return _questions.isNotEmpty
+          ? _questions.last
+          : Question(
+        text: "A kérdőív véget ért",
+        index: -1,
+        requiresTextInput: false,
+        answers: [],
+        twoColumn: false,
+      );
+    }
+    return _questions[_currentQuestionIndex];
+  }
 
   bool get isQuizFinished => _currentQuestionIndex >= _questions.length;
 
   int get score => _score;
 
-  void answerQuestion(int nextQuestionIndex) {
-    if (nextQuestionIndex <= _questions.length) {
-      _currentQuestionIndex = nextQuestionIndex;
-    } else {
-      _currentQuestionIndex = _questions.length + 1; // Mark as finished
+  // Check if we can go back to previous question
+  bool canGoBack() {
+    return _navigationHistory.isNotEmpty;
+  }
+
+  // Go to previous question
+  void previousQuestion() {
+    if (_navigationHistory.isNotEmpty) {
+      _currentQuestionIndex = _navigationHistory.removeLast();
+      notifyListeners();
     }
-    _score++;
-    notifyListeners();
+  }
+
+  void answerQuestion(int nextQuestionIndex) {
+    if (nextQuestionIndex >= 0 && nextQuestionIndex < _questions.length) {
+      // Save current index to history before navigating
+      _navigationHistory.add(_currentQuestionIndex);
+      _currentQuestionIndex = nextQuestionIndex;
+      notifyListeners();
+    } else {
+      // Kérdőív vége kezelése - állítsuk be az utolsó kérdésre
+      _currentQuestionIndex = _questions.length - 1;
+      notifyListeners();
+    }
   }
 
   void nextQuestion() {
+    // Save current index to history before navigating
+    if (_currentQuestionIndex < _questions.length) {
+      _navigationHistory.add(_currentQuestionIndex);
+    }
+
     // Get the current question
     Question currentQuestion = _questions[_currentQuestionIndex];
 
@@ -137,26 +181,32 @@ class QuizProvider4 with ChangeNotifier {
   void resetQuiz() {
     _currentQuestionIndex = 0;
     _score = 0;
+    _navigationHistory.clear();
     notifyListeners();
   }
 
   void updateRankableOptions(List<String> options) {
-    _questions[_currentQuestionIndex].rankableOptions = options;
-    notifyListeners();
+    if (_currentQuestionIndex >= 0 && _currentQuestionIndex < _questions.length) {
+      _questions[_currentQuestionIndex].rankableOptions = options;
+      notifyListeners();
+    }
   }
 
   List<String> getAnswersForQuestion(int questionIndex) {
-    return _questions[questionIndex]
-        .answers
-        .map((answer) => answer.text)
-        .toList();
+    if (questionIndex >= 0 && questionIndex < _questions.length) {
+      return _questions[questionIndex]
+          .answers
+          .map((answer) => answer.text)
+          .toList();
+    }
+    return [];
   }
 
   Future<void> saveUserResponse(Map<String, List<String>> answeerMap) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       String jsonString = json.encode(answeerMap.map(
-        (key, list) =>
+            (key, list) =>
             MapEntry(key, list.map((item) => item.toString()).toList()),
       ));
       await prefs.setString('user_response', jsonString);

@@ -124,7 +124,7 @@ class _spec_7_8_ModuleHipnotState extends State<spec_7_8_ModuleHipnoWidget> {
 
   late WebSocketChannel _channel = WebSocketChannel.connect(
     //Uri.parse('wss://34.72.67.6:8089'),
-    Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
+    Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
   );
 
   Future<String> szam_lekerdezes() async{
@@ -132,7 +132,7 @@ class _spec_7_8_ModuleHipnotState extends State<spec_7_8_ModuleHipnoWidget> {
     print("uzenet elkuldve");
     _channel = WebSocketChannel.connect(
       //Uri.parse('wss://34.72.67.6:8089'),
-      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
+      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
     );
     _channel.sink.add("szamlekerdezes|$Azonosito,mp3_1") ;
     // //_channel.sink.add("mp3|$azonosito-$hangfajlszam");
@@ -193,7 +193,7 @@ class _spec_7_8_ModuleHipnotState extends State<spec_7_8_ModuleHipnoWidget> {
 
     _channel = WebSocketChannel.connect(
       //Uri.parse('wss://34.72.67.6:8089'),
-      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
+      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
     );
     print("channel_azonosito $Azonosito");
     _channel.sink.add("szamlekerdezes|$Azonosito,mp3_1") ;
@@ -217,7 +217,7 @@ class _spec_7_8_ModuleHipnotState extends State<spec_7_8_ModuleHipnoWidget> {
 
     _channel = WebSocketChannel.connect(
       //Uri.parse('wss://34.72.67.6:8089'),
-      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
+      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
     );
     _channel.sink.add("szamlekerdezes|$Azonosito,mp3_2") ; //TODO ez majd mp3_2
     // //_channel.sink.add("mp3|$azonosito-$hangfajlszam");

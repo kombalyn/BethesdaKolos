@@ -1,7 +1,9 @@
+import 'package:bethesda_2/regisztracio/email_azonosito_3.dart';
 import 'package:bethesda_2/regisztracio/regisztracio.dart';
 import 'package:flutter/material.dart';
 import 'package:bethesda_2/home_page_model.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 //import 'package:video_player/video_player.dart';
 import 'constants/styles.dart'; // Make sure this path is correct based on where you placed the styles.dart file
@@ -12,13 +14,22 @@ import 'm3/ModuleOpening_M3.dart';
 import 'hipnom3/hipnom3_12_ModuleHipno.dart';
 import 'inter/ModuleOpening_inter.dart';
 import 'standardcare/ModuleOpening_standardcare.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+// Android speciális konfigurációhoz
+import 'package:webview_flutter_android/webview_flutter_android.dart';
+// iOS speciális konfigurációhoz
+import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 import 'hipno/ModuleOpening.dart';
 import 'home_page_model.dart';
 export 'home_page_model.dart';
 
 void main() async{
+  // Platform inicializálása WebView-hoz
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
@@ -56,11 +67,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   late WebSocketChannel _channel = WebSocketChannel.connect(
      //Uri.parse('wss://34.72.67.6:8089'),
-     Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
+     //Uri.parse('wss://prohuman.ddns.net:8889'),
+    Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
    );
 
 
-
+/*
   int calculateDateDifference(String message) {
     try {
       // Először megkeressük a zárójelben lévő részt
@@ -75,11 +87,14 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       String bracketsContent = message.substring(startIndex + 1, endIndex);
       List<String> parts = bracketsContent.split(',').map((e) => e.trim()).toList();
 
+      print("parts");
+      print(parts);
+
       // A 8,9,10-es indexű részek tartalmazzák a regisztrációs dátumot
       // Eltávolítjuk az idézőjeleket
-      String year = parts[7].replaceAll("'", "").trim();   // 2024
-      String month = parts[8].replaceAll("'", "").trim();  // 12
-      String day = parts[9].replaceAll("'", "").trim();    // 01
+      String year = parts[2].replaceAll("'", "").trim();   // 2024
+      String month = parts[3].replaceAll("'", "").trim();  // 12
+      String day = parts[4].replaceAll("'", "").trim();    // 01
 
       // Összeállítjuk a regisztrációs dátumot
       DateTime registrationDate = DateTime(
@@ -97,6 +112,65 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
     } catch (e) {
       print('Hiba történt a dátumok feldolgozása során: $e');
+      return -1;
+    }
+  }
+
+
+  int calculateDateDifference(String message) {
+    try {
+      // A válasz formátuma: "True,2024-12-01" vagy "False"
+      final parts = message.split(',');
+      if (parts.length < 2 || parts
+      [0] != "True") return -1;
+
+      final regDateStr = parts[1].trim();
+      final currentDate = DateTime.now();
+      final regDate = DateTime.parse(regDateStr);
+
+      return currentDate.difference(regDate).inDays;
+    } catch (e) {
+      print('Error calculating date difference: $e');
+      return -1;
+    }
+  }
+ */
+
+  int calculateDateDifference(String message) {
+    try {
+      // A válasz formátuma: "True,2024-12-01" vagy "False"
+      var parts = message.split('),');
+      parts = parts[0].split(',');
+
+      print("parts");
+      //print(parts);
+
+      String year = parts[7].replaceAll("'", "").trim();   // 2024
+      String month = parts[8].replaceAll("'", "").trim();  // 12
+      String day = parts[9].replaceAll("'", "").trim();    // 01
+
+      //print(year);
+      //print(month);
+      //print(day);
+
+      // Összeállítjuk a regisztrációs dátumot
+      DateTime registrationDate = DateTime(
+          int.parse(year),
+          int.parse(month),
+          int.parse(day)
+      );
+
+      //if (parts.length < 2 || parts[0] != "True") return -1;
+
+      //final regDateStr = parts[1].trim();
+      final currentDate = DateTime.now();
+      //final regDate = DateTime.parse(regDateStr);
+      //final regDate = registrationDate;
+
+      //return currentDate.difference(regDate).inDays;
+      return currentDate.difference(registrationDate).inDays;
+    } catch (e) {
+      print('Error calculating date difference: $e');
       return -1;
     }
   }
@@ -502,7 +576,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (BuildContext context) => Regisztracio(),
+                                builder: (BuildContext context) =>
+                                    Regisztracio(),
+                                    //Email_3(),
                               ),
                             );
                           },
@@ -847,63 +923,76 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             ),
                             ElevatedButton(
                               onPressed: () async {
-                                 _channel = WebSocketChannel.connect(
-                                   //Uri.parse('wss://34.72.67.6:8089'),
-                                   Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
-                                 );
+                                try {
 
-                                 //kerdes = "$_selectedLocaleId | $kerdes";
-                                 String? szov = _model.textController1?.text;
-                                 String? szov2 =
-                                     _model.textController2?.text;
-                                 print("bejelentkezes|$szov-$szov2");
-                                 _channel.sink
-                                     .add("bejelentkezes|$szov-$szov2") ;
-                                 //_channel.sink.add("bejelentkezes|adam@ali.com-azonosito");
-                                 _channel.stream.listen((message) {
-                                   print('Received message: $message');
-                                   print('idopont: $message');
-
-                                   int daysDifference = calculateDateDifference(message);
+                                  _channel = WebSocketChannel.connect(
+                                    //Uri.parse('wss://prohuman.ddns.net:8889'),
+                                    Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
+                                  );
+                              
+                                  String? szov = _model.textController1?.text;
+                                  String? szov2 = _model.textController2?.text;
+                                  print("bejelentkezes|$szov-$szov2");
+                              
+                                  _channel.sink.add("bejelentkezes|$szov-$szov2");
+                              
+                                  _channel.stream.listen((message) {
+                                  print('Received message: $message');
+                              
+                                  //if (message.startsWith("True")) {
+                                  if (message.startsWith("(True")) {
+                                  print("calculateDateDifference INDUL");
+                                  int daysDifference = calculateDateDifference(message);
+                    
+                                  print("calculateDateDifference INDUL");
+              
+              
+                                   daysDifference = calculateDateDifference(message);
                                    if (daysDifference >= 0) {
                                      print('A két dátum között eltelt napok száma: $daysDifference');
                                    } else {
                                      print('Hiba történt a számítás során');
                                    }
+                                   print("calculateDateDifference vege");
 
-                                if ((message.split(",")[0])=="(True") {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                      //TO DO AZONOSITO ES IDO ALAPJAN MELYIK NYILJON MEG
-                                      ModuleOpening(szov2!,daysDifference), //hipno
-                                      //ModuleOpening_M3('Azonosito'),
-                                      //hipnom3_ModuleHipno('Azonosito'),
-                                     // ModuleOpening_inter('Azonosito'),
-                                      //ModuleOpening_standardcare('Azonosito'),
+                                  if (message.startsWith("(True")) {
+                                  //if (message.startsWith("True")) {
+                                    print("calculateDateDifference INDUL");
+                                    int daysDifference = calculateDateDifference(message);
 
-                                    ),
-                                  );
-                                } else {
-                                  showDialog<String>(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        AlertDialog(
-                                          title: Text("Bejelentkezési Hiba"),
-                                          content: Text(
-                                              "A bejelentkezési email cím vagy az azonosító hibás, nem ismert. Ha még nem regisztráltál, akkor kérlek kattints az \"Először jársz itt\" gombra."),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () =>
-                                                  Navigator.pop(context, 'OK'),
-                                              child: const Text('OK'),
+                                    if (daysDifference >= 0) {
+                                    print('A két dátum között eltelt napok száma: $daysDifference');
+
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                              //TO DO AZONOSITO ES IDO ALAPJAN MELYIK NYILJON MEG
+                                              //ModuleOpening(szov2!,daysDifference), //hipno
+                                              ModuleOpening_M3('Azonosito',daysDifference),
+                                              //hipnom3_ModuleHipno('Azonosito'),
+                                             // ModuleOpening_inter('Azonosito'),
+                                              //ModuleOpening_standardcare('Azonosito'),
+
                                             ),
-                                          ],
-                                        ),
-                                  );
-                                }
+                                          );
+
+                                    } else {
+                                      _showErrorDialog("Hibás dátumformátum");
+                                    }
+                                  } else {
+                                    _showErrorDialog("Hibás bejelentkezési adatok");
+                                  }
+                                  } else {
+                                    _showErrorDialog("Hibás bejelentkezési adatok");
+                                  }
+
                                  });
+
+                                } catch (e) {
+                                  _showErrorDialog("Váratlan hiba történt");
+                                }
+
 
                                 print("TODO: Küldes a szerverre");
                               },
@@ -956,6 +1045,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         Regisztracio(),
+                                        //Email_3(),
                                   ),
                                 );
                               },
@@ -1296,62 +1386,75 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             ),
                             ElevatedButton(
                               onPressed: () async {
-                                _channel = WebSocketChannel.connect(
-                                  //Uri.parse('wss://34.72.67.6:8089'),
-                                  Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
-                                );
+                                try {
 
-                                //kerdes = "$_selectedLocaleId | $kerdes";
-                                String? szov = _model.textController1?.text;
-                                String? szov2 =
-                                    _model.textController2?.text;
-                                print("bejelentkezes|$szov-$szov2");
-                                _channel.sink
-                                    .add("bejelentkezes|$szov-$szov2") ;
-                                //_channel.sink.add("bejelentkezes|adam@ali.com-azonosito");
-                                _channel.stream.listen((message) {
-                                  print('Received message: $message');
+                                  _channel = WebSocketChannel.connect(
+                                    //Uri.parse('wss://prohuman.ddns.net:8889'),
+                                    Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
+                                  );
 
-                                  int daysDifference = calculateDateDifference(message);
-                                  if (daysDifference >= 0) {
-                                    print('A két dátum között eltelt napok száma: $daysDifference');
-                                  } else {
-                                    print('Hiba történt a számítás során');
-                                  }
+                                  String? szov = _model.textController1?.text;
+                                  String? szov2 = _model.textController2?.text;
+                                  print("bejelentkezes|$szov-$szov2");
 
-                                  if ((message.split(",")[0])=="(True") {
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                        //TO DO AZONOSITO ES IDO ALAPJAN MELYIK NYILJON MEG
-                                        ModuleOpening(szov2!,daysDifference), //hipno
-                                        //ModuleOpening_M3(szov2!,daysDifference),
-                                        //hipnom3_ModuleHipno('Azonosito'),
-                                        // ModuleOpening_inter('Azonosito'),
-                                        //ModuleOpening_standardcare('Azonosito'),
+                                  _channel.sink.add("bejelentkezes|$szov-$szov2");
 
-                                      ),
-                                    );
-                                  } else {
-                                    showDialog<String>(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          AlertDialog(
-                                            title: Text("Bejelentkezési Hiba"),
-                                            content: Text(
-                                                "A bejelentkezési email cím vagy az azonosító hibás, nem ismert. Ha még nem regisztráltál, akkor kérlek kattints az \"Először jársz itt\" gombra."),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () =>
-                                                    Navigator.pop(context, 'OK'),
-                                                child: const Text('OK'),
-                                              ),
-                                            ],
-                                          ),
-                                    );
-                                  }
-                                });
+                                  _channel.stream.listen((message) {
+                                    print('Received message: $message');
+
+                                    //if (message.startsWith("True")) {
+                                    if (message.startsWith("(True")) {
+                                      print("calculateDateDifference INDUL");
+                                      int daysDifference = calculateDateDifference(message);
+
+                                      print("calculateDateDifference INDUL");
+
+
+                                      daysDifference = calculateDateDifference(message);
+                                      if (daysDifference >= 0) {
+                                        print('A két dátum között eltelt napok száma: $daysDifference');
+                                      } else {
+                                        print('Hiba történt a számítás során');
+                                      }
+                                      print("calculateDateDifference vege");
+
+                                      if (message.startsWith("(True")) {
+                                      //if (message.startsWith("True")) {
+                                        print("calculateDateDifference INDUL");
+                                        int daysDifference = calculateDateDifference(message);
+
+                                        if (daysDifference >= 0) {
+                                          print('A két dátum között eltelt napok száma: $daysDifference');
+
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                              //TO DO AZONOSITO ES IDO ALAPJAN MELYIK NYILJON MEG
+                                              //ModuleOpening(szov2!,daysDifference), //hipno
+                                              ModuleOpening_M3('Azonosito',daysDifference),
+                                              //hipnom3_ModuleHipno('Azonosito'),
+                                              // ModuleOpening_inter('Azonosito'),
+                                              //ModuleOpening_standardcare('Azonosito'),
+                                            ),
+                                          );
+
+                                        } else {
+                                          _showErrorDialog("Hibás dátumformátum");
+                                        }
+                                      } else {
+                                        _showErrorDialog("Hibás bejelentkezési adatok");
+                                      }
+                                    } else {
+                                      _showErrorDialog("Hibás bejelentkezési adatok");
+                                    }
+
+                                  });
+
+                                } catch (e) {
+                                  _showErrorDialog("Váratlan hiba történt");
+                                }
+
 
                                 print("TODO: Küldes a szerverre");
                               },
@@ -1405,6 +1508,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         Regisztracio(),
+                                        //Email_3(),
                                   ),
                                 );
                               },
@@ -1443,6 +1547,22 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text("Hiba"),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('OK'),
+          ),
+        ],
       ),
     );
   }

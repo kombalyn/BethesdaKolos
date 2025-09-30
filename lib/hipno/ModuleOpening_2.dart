@@ -14,7 +14,10 @@ import 'package:bethesda_2/constants/colors.dart'; // Make sure this path is cor
 import '../appbar/appbar.dart';
 
 class ModuleOpening2 extends StatelessWidget {
-  const ModuleOpening2({super.key});
+
+
+  String Azonosito = '';
+  ModuleOpening2(String s, {super.key}){Azonosito=s;}
 
   @override
   Widget build(BuildContext context) {
@@ -24,16 +27,18 @@ class ModuleOpening2 extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.blueish),
         useMaterial3: false,
       ),
-      home: const ModuleOpening2Widget(),
+      home:  ModuleOpening2Widget(Azonosito),
     );
   }
 }
 
 class ModuleOpening2Widget extends StatefulWidget {
-  const ModuleOpening2Widget({super.key});
+
+  String Azonosito = '';
+  ModuleOpening2Widget(String azonosito, {super.key}){Azonosito=azonosito;}
 
   @override
-  State<ModuleOpening2Widget> createState() => _ModuleOpening2WidgetState();
+  State<ModuleOpening2Widget> createState() => _ModuleOpening2WidgetState(Azonosito);
 }
 
 class _ModuleOpening2WidgetState extends State<ModuleOpening2Widget> {
@@ -46,6 +51,9 @@ class _ModuleOpening2WidgetState extends State<ModuleOpening2Widget> {
   late bool toggle = true;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  String Azonosito = '';
+  _ModuleOpening2WidgetState(String azonosito){Azonosito=azonosito;}
 
   @override
   void initState() {
@@ -208,7 +216,7 @@ class _ModuleOpening2WidgetState extends State<ModuleOpening2Widget> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          ModuleOpening2(),
+                                          ModuleOpening2(Azonosito),
                                     ),
                                   );
 

@@ -2,8 +2,6 @@ import 'package:bethesda_2/constants/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:bethesda_2/home_page_model.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:video_player/video_player.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'ModuleHipno_page2.dart';
 import 'package:bethesda_2/constants/sidebar_layout.dart'; // Make sure this path is correct
 
@@ -48,27 +46,15 @@ class _ModuleOpeningWidgetState extends State<ModuleOpeningWidget> {
   late double _currentPointOnFunction = 0; // Az aktuális függvényérték
   late double _sliderValue = 0.0; // A csúszka értéke
   late bool toggle = true;
-  late VideoPlayerController _webViewController;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   String Azonosito = '';
-  _ModuleOpeningWidgetState(String azonosito){
-    Azonosito=azonosito;
-
-  }
+  _ModuleOpeningWidgetState(String azonosito){Azonosito=azonosito;}
 
   @override
   void initState() {
     super.initState();
     _model = HomePageModel();
-
-    _webViewController = VideoPlayerController.networkUrl(
-      Uri.parse("https://storage.googleapis.com/lomeeibucket/MJ_k%C3%B6sz%C3%B6nt%C3%B6.mp4"), // Cseréld ki a videód URL-jére
-    )..initialize().then((_) {
-      setState(() {
-        _webViewController.play();
-      }); // Frissíti az UI-t, ha a videó inicializálódott
-    });
 
     print("MASH " + Azonosito);
 
@@ -98,19 +84,19 @@ class _ModuleOpeningWidgetState extends State<ModuleOpeningWidget> {
             },
             '3-4.hét': {
               'screenBuilder': (context) => ModuleHipno2("$Azonosito"),
-              'isClickable': false,
+              'isClickable': true,
             },
             '5-6.hét': {
-              'screenBuilder': (context) => ModuleHipno3('Azonosito'),
-              'isClickable': false,
+              'screenBuilder': (context) => ModuleHipno3("$Azonosito"),
+              'isClickable': true,
             },
             '7-8.hét': {
-              'screenBuilder': (context) => ModuleHipno4('Azonosito'),
-              'isClickable': false,
+              'screenBuilder': (context) => ModuleHipno4("$Azonosito"),
+              'isClickable': true,
             },
             '9-12.hét': {
-              'screenBuilder': (context) => ModuleHipno5('Azonosito'),
-              'isClickable': false,
+              'screenBuilder': (context) => ModuleHipno5("$Azonosito"),
+              'isClickable': true,
             },
           },
           selectedWeek: '1.hét', // Specify which week is selected
@@ -167,35 +153,9 @@ class _ModuleOpeningWidgetState extends State<ModuleOpeningWidget> {
                               width: MediaQuery.of(context).size.width * 0.73, // 73% of the screen width
                               height: MediaQuery.of(context).size.width * 0.4,  // Increase height proportionately
                               //ádám: MJ_köszöntö.mp4
-                                //child: WebViewWidget(controller: controller),
-                              /*HtmlWidget(
+                              child: HtmlWidget(
                                 '<video controls controlsList="nodownload" style="border:none; margin:0; padding:0; width:100%; height:100%;" src="https://storage.googleapis.com/lomeeibucket/MJ_k%C3%B6sz%C3%B6nt%C3%B6.mp4" ></video>',
                               ),
-                              child: HtmlWidget(
-                                '''
-                              <iframe src="https://storage.googleapis.com/lomeeibucket/MJ_k%C3%B6sz%C3%B6nt%C3%B6.mp4" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
-                              ''',*/
-
-                                child: HtmlWidget(
-                                  '''
-                              <iframe src="https://storage.googleapis.com/lomeeibucket/MJ_k%C3%B6sz%C3%B6nt%C3%B6_standardqality.mp4" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
-                              ''',
-                              ),
-
-                              /*
-                              child: HtmlWidget(
-                                  '''
-                              <iframe src="https://storage.googleapis.com/lomeeibucket/MJ_k%C3%B6sz%C3%B6nt%C3%B6.mp4" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
-                              ''',
-                              ),
-
-
-                              child: AspectRatio(
-                                aspectRatio: _webViewController.value.aspectRatio,
-                                child: VideoPlayer(_webViewController),
-                              ),*/
-
-
                             ),
                           ),
                           SizedBox(
@@ -329,23 +289,23 @@ class _ModuleOpeningWidgetState extends State<ModuleOpeningWidget> {
                 SidebarLayout(
                   weekScreens: {
                     '1-2.hét': {
-                      'screenBuilder': (context) => ModuleHipno('Azonosito'),
+                      'screenBuilder': (context) => ModuleHipno("$Azonosito"),
                       'isClickable': true,
                     },
                     '3-4.hét': {
-                      'screenBuilder': (context) => ModuleHipno2('Azonosito'),
+                      'screenBuilder': (context) => ModuleHipno2("$Azonosito"),
                       'isClickable': true,
                     },
                     '5-6.hét': {
-                      'screenBuilder': (context) => ModuleHipno3('Azonosito'),
+                      'screenBuilder': (context) => ModuleHipno3("$Azonosito"),
                       'isClickable': true,
                     },
                     '7-8.hét': {
-                      'screenBuilder': (context) => ModuleHipno4('Azonosito'),
+                      'screenBuilder': (context) => ModuleHipno4("$Azonosito"),
                       'isClickable': true,
                     },
                     '9-12.hét': {
-                      'screenBuilder': (context) => ModuleHipno5('Azonosito'),
+                      'screenBuilder': (context) => ModuleHipno5("$Azonosito"),
                       'isClickable': true,
                     },
 
@@ -418,13 +378,6 @@ class _ModuleOpeningWidgetState extends State<ModuleOpeningWidget> {
                               width: MediaQuery.of(context).size.width * 0.73, // 73% of the screen width
                               height: MediaQuery.of(context).size.width * 0.4,  // Increase height proportionately
                               //ádám: MJ_köszöntö.mp4
-                              /*child: HtmlWidget(
-                                '<video controls controlsList="nodownload" style="border:none; margin:0; padding:0; width:100%; height:100%;" src="https://storage.googleapis.com/lomeeibucket/MJ_k%C3%B6sz%C3%B6nt%C3%B6.mp4" ></video>',
-                              ),
-                              child: HtmlWidget(
-                                '<video controls controlsList="nodownload" style="border:none; margin:0; padding:0; width:100%; height:100%;" src="https://storage.googleapis.com/lomeeibucket/MJ_k%C3%B6sz%C3%B6nt%C3%B6.mp4" ></video>',
-                              ),*/
-
                               child: HtmlWidget(
                                 '<video controls controlsList="nodownload" style="border:none; margin:0; padding:0; width:100%; height:100%;" src="https://storage.googleapis.com/lomeeibucket/MJ_k%C3%B6sz%C3%B6nt%C3%B6.mp4" ></video>',
                               ),
@@ -561,23 +514,23 @@ class _ModuleOpeningWidgetState extends State<ModuleOpeningWidget> {
                 SidebarLayout(
                   weekScreens: {
                     '1-2.hét': {
-                      'screenBuilder': (context) => ModuleHipno('Azonosito'),
+                      'screenBuilder': (context) => ModuleHipno("$Azonosito"),
                       'isClickable': true,
                     },
                     '3-4.hét': {
-                      'screenBuilder': (context) => ModuleHipno2('Azonosito'),
+                      'screenBuilder': (context) => ModuleHipno2("$Azonosito"),
                       'isClickable': true,
                     },
                     '5-6.hét': {
-                      'screenBuilder': (context) => ModuleHipno3('Azonosito'),
+                      'screenBuilder': (context) => ModuleHipno3("$Azonosito"),
                       'isClickable': true,
                     },
                     '7-8.hét': {
-                      'screenBuilder': (context) => ModuleHipno4('Azonosito'),
+                      'screenBuilder': (context) => ModuleHipno4("$Azonosito"),
                       'isClickable': true,
                     },
                     '9-12.hét': {
-                      'screenBuilder': (context) => ModuleHipno5('Azonosito'),
+                      'screenBuilder': (context) => ModuleHipno5("$Azonosito"),
                       'isClickable': true,
                     },
 
@@ -651,23 +604,9 @@ class _ModuleOpeningWidgetState extends State<ModuleOpeningWidget> {
                               width: MediaQuery.of(context).size.width * 0.73, // 73% of the screen width
                               height: MediaQuery.of(context).size.width * 0.4,  // Increase height proportionately
                               //ádám: MJ_köszöntö.mp4
-                              /*child: HtmlWidget(
-                                '<video controls controlsList="nodownload" style="border:none; margin:0; padding:0; width:100%; height:100%;" src="https://storage.googleapis.com/lomeeibucket/MJ_k%C3%B6sz%C3%B6nt%C3%B6.mp4" ></video>',
-                              ),
                               child: HtmlWidget(
                                 '<video controls controlsList="nodownload" style="border:none; margin:0; padding:0; width:100%; height:100%;" src="https://storage.googleapis.com/lomeeibucket/MJ_k%C3%B6sz%C3%B6nt%C3%B6.mp4" ></video>',
                               ),
-
-                              child: AspectRatio(
-                                aspectRatio: _webViewController.value.aspectRatio,
-                                child: VideoPlayer(_webViewController),
-                              ),*/
-
-
-                              child: HtmlWidget(
-                                '<video controls controlsList="nodownload" style="border:none; margin:0; padding:0; width:100%; height:100%;" src="https://storage.googleapis.com/lomeeibucket/MJ_k%C3%B6sz%C3%B6nt%C3%B6_standardqality.mp4" ></video>',
-                              ),
-
                             ),
                           ),
 
@@ -806,19 +745,19 @@ class _ModuleOpeningWidgetState extends State<ModuleOpeningWidget> {
               },
               '3-4.hét': {
                 'screenBuilder': (context) => ModuleHipno2("$Azonosito"),
-                'isClickable': false,
+                'isClickable': true,
               },
               '5-6.hét': {
-                'screenBuilder': (context) => ModuleHipno3('Azonosito'),
-                'isClickable': false,
+                'screenBuilder': (context) => ModuleHipno3("$Azonosito"),
+                'isClickable': true,
               },
               '7-8.hét': {
-                'screenBuilder': (context) => ModuleHipno4('Azonosito'),
-                'isClickable': false,
+                'screenBuilder': (context) => ModuleHipno4("$Azonosito"),
+                'isClickable': true,
               },
               '9-12.hét': {
-                'screenBuilder': (context) => ModuleHipno5('Azonosito'),
-                'isClickable': false,
+                'screenBuilder': (context) => ModuleHipno5("$Azonosito"),
+                'isClickable': true,
               },
 
             },

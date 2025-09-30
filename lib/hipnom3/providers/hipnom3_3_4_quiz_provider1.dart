@@ -23,7 +23,8 @@ class QuizProvider1 with ChangeNotifier {
     Question(
       twoColumn: false,
       text:
-          '1: Mindenkinek más jut először az eszébe a saját fájdalmáról. Van aki úgy érzi, hogy a fájdalom megfosztja a jó dolgoktól, de van olyan is, aki ugyan úgy éli az életét a fájdalom ellenére, mint azelőtt. Te mit gondolsz a saját fájdalmadról? Írj le bármit, ami eszedbe jut!',
+          //'1: Mindenkinek más jut először az eszébe a saját fájdalmáról. Van aki úgy érzi, hogy a fájdalom megfosztja a jó dolgoktól, de van olyan is, aki ugyan úgy éli az életét a fájdalom ellenére, mint azelőtt. Te mit gondolsz a saját fájdalmadról? Írj le bármit, ami eszedbe jut!',
+          'Mindenkinek más jut először az eszébe a saját fájdalmáról. Van aki úgy érzi, hogy a fájdalom megfosztja a jó dolgoktól, de van olyan is, aki ugyan úgy éli az életét a fájdalom ellenére, mint azelőtt. Te mit gondolsz a saját fájdalmadról? Írj le bármit, ami eszedbe jut!',
       index: 1,
       requiresTextInput: true,
       answers: [],

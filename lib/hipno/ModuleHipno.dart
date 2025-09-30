@@ -26,6 +26,8 @@ import '../appbar/appbar.dart';
 class ModuleHipno extends StatelessWidget {
   String Azonosito = '';
 
+
+
   ModuleHipno(String s, {super.key}) {
     Azonosito = s;
   }
@@ -120,16 +122,16 @@ class ModuleHipnoWidget extends StatefulWidget {
 class _ModuleHipnotState extends State<ModuleHipnoWidget> {
 
   late WebSocketChannel _channel = WebSocketChannel.connect(
-    //Uri.parse('wss://34.72.67.6:8089'),
-    Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
+    //Uri.parse('wss://34.72.67.6:8889'),
+    Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
   );
 
   Future<String> szam_lekerdezes() async{
     String vissz = "-1";
     print("uzenet elkuldve");
     _channel = WebSocketChannel.connect(
-      //Uri.parse('wss://34.72.67.6:8089'),
-      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
+      //Uri.parse('wss://34.72.67.6:8889'),
+      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
     );
     _channel.sink.add("szamlekerdezes|$Azonosito,mp3_1") ;
     // //_channel.sink.add("mp3|$azonosito-$hangfajlszam");
@@ -189,8 +191,8 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
   Future<void> szamokBbeallitas()async {
 
     _channel = WebSocketChannel.connect(
-      //Uri.parse('wss://34.72.67.6:8089'),
-      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
+      //Uri.parse('wss://34.72.67.6:8889'),
+      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
     );
     print("channel_azonosito $Azonosito");
     _channel.sink.add("szamlekerdezes|$Azonosito,mp3_1") ;
@@ -213,8 +215,8 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
     });
 
     _channel = WebSocketChannel.connect(
-      //Uri.parse('wss://34.72.67.6:8089'),
-      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
+      //Uri.parse('wss://34.72.67.6:8889'),
+      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
     );
     _channel.sink.add("szamlekerdezes|$Azonosito,mp3_2") ; //TODO ez majd mp3_2
     // //_channel.sink.add("mp3|$azonosito-$hangfajlszam");
@@ -285,24 +287,24 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
             iconSuffix: '_l',  // Here you pass the suffix you want
             weekScreens: {
               '1-2.hét': {
-                'screenBuilder': (context) => ModuleHipno('Azonosito'),
+                'screenBuilder': (context) => ModuleHipno("$Azonosito"),
                 'isClickable': true,
               },
               '3-4.hét': {
-                'screenBuilder': (context) => ModuleHipno2('Azonosito'),
-                'isClickable': false,
+                'screenBuilder': (context) => ModuleHipno2("$Azonosito"),
+                'isClickable': true,
               },
               '5-6.hét': {
-                'screenBuilder': (context) => ModuleHipno3('Azonosito'),
-                'isClickable': false,
+                'screenBuilder': (context) => ModuleHipno3("$Azonosito"),
+                'isClickable': true,
               },
               '7-8.hét': {
-                'screenBuilder': (context) => ModuleHipno4('Azonosito'),
-                'isClickable': false,
+                'screenBuilder': (context) => ModuleHipno4("$Azonosito"),
+                'isClickable': true,
               },
               '9-12.hét': {
-                'screenBuilder': (context) => ModuleHipno5('Azonosito'),
-                'isClickable': false,
+                'screenBuilder': (context) => ModuleHipno5("$Azonosito"),
+                'isClickable': true,
               },
             },
             selectedWeek: '1-2.hét', // Specify which week is selected
@@ -4448,7 +4450,7 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
                 top: 0, // Position it at the top
                 left: MediaQuery.of(context).size.width*0.05, // Align it to the left corner
                 child: SafeArea(
-                  child: 
+                  child:
                   IconButton(
                     icon: Icon(Icons.menu, color: AppColors.blueish),
                     onPressed: () {
@@ -4456,7 +4458,7 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
                     },
                   ),
                 ),
-                  
+
               ),
             ],
           ),
@@ -6515,24 +6517,24 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
 
                 weekScreens: {
                   '1-2.hét': {
-                    'screenBuilder': (context) => ModuleHipno('Azonosito'),
+                    'screenBuilder': (context) => ModuleHipno("$Azonosito"),
                     'isClickable': true,
                   },
                   '3-4.hét': {
-                    'screenBuilder': (context) => ModuleHipno2('Azonosito'),
-                    'isClickable': false,
+                    'screenBuilder': (context) => ModuleHipno2("$Azonosito"),
+                    'isClickable': true,
                   },
                   '5-6.hét': {
-                    'screenBuilder': (context) => ModuleHipno3('Azonosito'),
-                    'isClickable': false,
+                    'screenBuilder': (context) => ModuleHipno3("$Azonosito"),
+                    'isClickable': true,
                   },
                   '7-8.hét': {
-                    'screenBuilder': (context) => ModuleHipno4('Azonosito'),
-                    'isClickable': false,
+                    'screenBuilder': (context) => ModuleHipno4("$Azonosito"),
+                    'isClickable': true,
                   },
                   '9-12.hét': {
-                    'screenBuilder': (context) => ModuleHipno5('Azonosito'),
-                    'isClickable': false,
+                    'screenBuilder': (context) => ModuleHipno5("$Azonosito"),
+                    'isClickable': true,
                   },
                 },
                 selectedWeek: '1-2.hét', // Specify which week is selected

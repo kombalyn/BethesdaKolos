@@ -2,30 +2,14 @@ import 'package:bethesda_2/m3/ModuleOpening_M3.dart';
 import 'package:bethesda_2/m3/models/questions1.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/quiz_provider1.dart';
+import '../ModuleM3_12het.dart';
 import '../providers/quiz_provider2.dart';
-import 'dart:convert';
-import '../screens/show_response.dart';
+import 'package:bethesda_2/constants/colors.dart';
+import 'package:bethesda_2/constants/styles.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import '../../constants/meno_gomb.dart';
+import '../../appbar/appbar.dart';
 
-import '../providers/quiz_provider1.dart';
-import '../providers/quiz_provider2.dart';
-import '../providers/quiz_provider3.dart';
-import '../providers/quiz_provider4.dart';
-import '../providers/quiz_provider5.dart';
-import '../providers/quiz_provider6.dart';
-import '../providers/quiz_provider7.dart';
-import 'dart:convert';
-import '../screens/show_response.dart';
-
-import '../providers/quiz_provider1.dart';
-import '../providers/quiz_provider2.dart';
-import '../providers/quiz_provider3.dart';
-import '../providers/quiz_provider4.dart';
-import '../providers/quiz_provider5.dart';
-import '../providers/quiz_provider6.dart';
-import '../providers/quiz_provider7.dart';
-import 'dart:convert';
-import '../screens/show_response.dart';
 import '../screens/quiz_screen1.dart';
 import '../screens/quiz_screen2.dart';
 import '../screens/quiz_screen3.dart';
@@ -33,25 +17,13 @@ import '../screens/quiz_screen4.dart';
 import '../screens/quiz_screen5.dart';
 import '../screens/quiz_screen6.dart';
 import '../screens/quiz_screen7.dart';
-
-
-import '../providers/quiz_provider2.dart';
-import '../providers/quiz_provider3.dart';
-import '../providers/quiz_provider4.dart';
-import '../providers/quiz_provider5.dart';
-import '../providers/quiz_provider6.dart';
-import '../providers/quiz_provider7.dart';
-import '../ModuleM3_12het.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-// import '../models/questions1.dart';
-import 'package:bethesda_2/constants/colors.dart';
-import 'package:bethesda_2/constants/styles.dart';
-// import '../ModuleOpening_M3.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
-import '../../constants/meno_gomb.dart';
-import '../../appbar/appbar.dart';
+import '../screens/quiz_screen1.dart';
+import '../screens/quiz_screen2.dart';
+import '../screens/quiz_screen3.dart';
+import '../screens/quiz_screen4.dart';
+import '../screens/quiz_screen5.dart';
+import '../screens/quiz_screen6.dart';
+import '../screens/quiz_screen7.dart';
 
 class QuizScreen2 extends StatefulWidget {
   static const routeName = '/quiz2';
@@ -64,9 +36,6 @@ class QuizScreen2 extends StatefulWidget {
 
 class _QuizScreenState2 extends State<QuizScreen2> {
   final List<String> _rankableOptions_ = ["1", "2", "3", "4"];
-  // Other instance variables and controllers...
-
-  // Define the color state lists as instance variables
   List<Color> colorStates1 = [];
   List<Color> colorStates2 = [];
   var icon_most = {
@@ -162,40 +131,24 @@ class _QuizScreenState2 extends State<QuizScreen2> {
   int _selectedAnswerIndex = -1;
   bool is_hat_ketto = true;
   bool _isSecondColumnVisible = false;
-
   List<String> _secondColumnTexts = [];
-
-  // WebSocketChannel? _channel;
+  Map<String, List<String>> answeerMap = {};
 
   @override
   void initState() {
     super.initState();
-    colorStates1 = List<Color>.filled(_optionControllers2.length, Colors.white,
-        growable: true);
-    colorStates2 = List<Color>.filled(_optionControllers3.length, Colors.white,
-        growable: true);
-
-    // _channel = WebSocketChannel.connect(
-    //   // Uri.parse('wss://34.72.67.6:8089'),
-    //   Uri.parse('wss://146.148.43.137:8089'),
-    // );
-
-    // _channel?.stream.listen((message) {
-    //   print('Received message: $message');
-    // });
+    colorStates1 = List<Color>.filled(_optionControllers2.length, Colors.white, growable: true);
+    colorStates2 = List<Color>.filled(_optionControllers3.length, Colors.white, growable: true);
   }
 
-  Map<String, List<String>> answeerMap = {};
-  saveAsnwere(Question obj) {
-    answeerMap
-        .addAll({obj.text.toString().split(':').first: obj.userResponse!});
+  void saveAsnwere(Question obj) {
+    answeerMap.addAll({obj.text.toString().split(':').first: obj.userResponse!});
     print('ans map $answeerMap');
     setState(() {});
   }
 
   void _sendAnswer(int questionIndex, String answer, String quetion) {
     String message = 'save|Azonosito;M3;1-2;$questionIndex,$answer';
-    // _channel?.sink.add(message);
   }
 
   @override
@@ -212,7 +165,6 @@ class _QuizScreenState2 extends State<QuizScreen2> {
       controller.dispose();
     }
     _scrollController.dispose();
-    // _channel?.sink.close();
     super.dispose();
   }
 
@@ -224,44 +176,78 @@ class _QuizScreenState2 extends State<QuizScreen2> {
     );
   }
 
-  // Future<List<String>> getAnswersForQuestionIndex(int questionIndex, List<Question> questionList) async {
-  //   try {
-  //     final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //     String? jsonString = prefs.getString('user_response');
-  //
-  //     if (jsonString != null) {
-  //       Map<String, dynamic> decodedMap = json.decode(jsonString);
-  //       answeerMap = decodedMap.map(
-  //             (key, value) => MapEntry(
-  //           key,
-  //           List<String>.from(value.map((item) => item as String)),
-  //         ),
-  //       );
-  //
-  //       // Get the key for the question at the specified index (e.g., 22)
-  //       String questionKey = questionList[questionIndex].text.toString().split(':').first;
-  //
-  //       // Return the answers corresponding to the key
-  //       return answeerMap[questionKey] ?? [];
-  //     }
-  //   } catch (e) {
-  //     print('Error fetching answers: $e');
-  //   }
-  //
-  //   // Return an empty list if something goes wrong
-  //   return [];
-  // }
+  void _handleBackButton(QuizProvider2 quizProvider) {
+    quizProvider.previousQuestion();
+    _scrollToTop();
+  }
+
+  void _restorePreviousAnswers(Question question) {
+    _controller.clear();
+    _commentController.clear();
+    _optionControllers.clear();
+    _optionControllers2.clear();
+    _optionControllers3.clear();
+    _rankableOptions.clear();
+    _selectedAnswerIndex = -1;
+    _sliderValue = 0.0;
+
+    if (question.userResponse == null) return;
+
+    if (question.requiresTextInput) {
+      _controller.text = question.userResponse!.first;
+    }
+
+    if (question.requiresRadioOptions) {
+      final response = question.userResponse!.first;
+      final index = question.radioOptions.indexWhere((opt) => opt.text == response);
+      if (index != -1) _selectedAnswerIndex = index;
+
+      if (question.allowsComment && question.userResponse!.length > 1) {
+        _commentController.text = question.userResponse![1].replaceFirst('comment:', '');
+      }
+    }
+
+    if (question.answers.any((a) => a.isScale)) {
+      _sliderValue = double.tryParse(question.userResponse!.first) ?? 0.0;
+    }
+
+    if (question.twoColumn) {
+      for (var response in question.userResponse!) {
+        final parts = response.split(':');
+        if (parts.length == 2) {
+          _optionControllers2.add(TextEditingController(text: parts[0]));
+          _optionControllers3.add(TextEditingController(text: parts[1]));
+        }
+      }
+    }
+
+    if (question.requiresRanking) {
+      _rankableOptions = List.from(question.userResponse!);
+      _isReordering = true;
+    }
+
+    if (question.requiresTable || question.requiresTableBigger) {
+      for (int i = 0; i < question.userResponse!.length; i++) {
+        final row = i ~/ 7;
+        final col = i % 7;
+        if (row < matrix.length && col < matrix[row].length) {
+          matrix[row][col].text = question.userResponse![i];
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final quizProvider = Provider.of<QuizProvider2>(context, listen: true);
-
     final currentQuestion = quizProvider.currentQuestion;
     double progressValue = (quizProvider.currentQuestion.index + 1) / 18;
 
     return Scaffold(
       appBar: CustomAppBar(title: 'Kutatási fázis'),
-      body: SingleChildScrollView(
+      body: Stack(
+        children: [
+        SingleChildScrollView(
         controller: _scrollController,
         child: Column(
           children: [
@@ -283,8 +269,7 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                               alignment: Alignment.center,
                               children: [
                                 Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.55,
+                                  width: MediaQuery.of(context).size.width * 0.55,
                                   margin: const EdgeInsets.only(top: 20.0),
                                   padding: const EdgeInsets.all(16.0),
                                   decoration: BoxDecoration(
@@ -322,10 +307,7 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                                       child: LinearProgressIndicator(
                                         value: progressValue,
                                         backgroundColor: AppColors.whitewhite,
-                                        valueColor:
-                                            const AlwaysStoppedAnimation<Color>(
-                                          Colors.yellow,
-                                        ),
+                                        valueColor: const AlwaysStoppedAnimation<Color>(Colors.yellow),
                                         minHeight: 20.0,
                                       ),
                                     ),
@@ -337,8 +319,7 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                           if (currentQuestion.hasInfoButton) ...[
                             Padding(
                               padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      MediaQuery.of(context).size.width * 0.06),
+                                  horizontal: MediaQuery.of(context).size.width * 0.06),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -352,92 +333,60 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                                   const SizedBox(width: 8.0),
                                   Tooltip(
                                     message: currentQuestion.infoButtonText,
-                                    child: const Icon(
-                                      Icons.info_outline,
-                                      color: Colors.grey, // Custom color (blue)
-                                    ),
+                                    child: const Icon(Icons.info_outline, color: Colors.grey),
                                   ),
                                 ],
                               ),
                             ),
                           ],
-                          SizedBox(
-                              height: MediaQuery.of(context).size.width * 0.03),
+                          SizedBox(height: MediaQuery.of(context).size.width * 0.03),
 
+                          // Question types handling
                           if (currentQuestion.requiresRanking) ...[
                             Column(
                               children: [
-                                // For Question 4.1 (index == 14)
-                                if (quizProvider.currentQuestion.index ==
-                                    14) ...[
+                                if (quizProvider.currentQuestion.index == 14) ...[
                                   if (_optionControllers.isNotEmpty)
                                     SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.5,
+                                      width: MediaQuery.of(context).size.width * 0.5,
                                       child: ListView.builder(
                                         shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
+                                        physics: const NeverScrollableScrollPhysics(),
                                         itemCount: _optionControllers.length,
                                         itemBuilder: (context, index) {
-                                          var controller =
-                                              _optionControllers[index];
+                                          var controller = _optionControllers[index];
                                           return Padding(
                                             key: ValueKey(controller),
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0, vertical: 4.0),
+                                            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                                             child: Row(
                                               children: [
                                                 SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.4,
+                                                  width: MediaQuery.of(context).size.width * 0.4,
                                                   child: TextField(
                                                     controller: controller,
                                                     decoration: InputDecoration(
-                                                      labelText:
-                                                          'Az ötleted...',
-                                                      labelStyle: TextStyle(
-                                                          color: Colors
-                                                              .grey.shade600),
-                                                      border:
-                                                          const OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color: Colors.green,
-                                                            width: 2.0),
+                                                      labelText: 'Az ötleted...',
+                                                      labelStyle: TextStyle(color: Colors.grey.shade600),
+                                                      border: const OutlineInputBorder(
+                                                        borderSide: BorderSide(color: Colors.green, width: 2.0),
                                                       ),
-                                                      focusedBorder:
-                                                          const OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color:
-                                                                Colors.yellow,
-                                                            width: 2.0),
+                                                      focusedBorder: const OutlineInputBorder(
+                                                        borderSide: BorderSide(color: Colors.yellow, width: 2.0),
                                                       ),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                        borderSide: BorderSide(
-                                                            color: Colors
-                                                                .grey.shade600,
-                                                            width: 2.0),
+                                                      enabledBorder: OutlineInputBorder(
+                                                        borderSide: BorderSide(color: Colors.grey.shade600, width: 2.0),
                                                       ),
                                                       filled: true,
                                                       fillColor: Colors.white,
                                                     ),
-                                                    style: TextStyle(
-                                                        color: Colors
-                                                            .grey.shade600),
+                                                    style: TextStyle(color: Colors.grey.shade600),
                                                     maxLines: null,
                                                   ),
                                                 ),
                                                 IconButton(
-                                                  icon: const Icon(Icons.delete,
-                                                      color: Colors.grey),
+                                                  icon: const Icon(Icons.delete, color: Colors.grey),
                                                   onPressed: () {
-                                                    setState(() {
-                                                      _optionControllers
-                                                          .removeAt(index);
-                                                    });
+                                                    setState(() => _optionControllers.removeAt(index));
                                                   },
                                                 ),
                                               ],
@@ -446,55 +395,34 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                                         },
                                       ),
                                     ),
-                                  SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.width *
-                                              0.02),
+                                  SizedBox(height: MediaQuery.of(context).size.width * 0.02),
                                   GradientButton(
                                     text: 'ÚJ MEGADÁSA',
-                                    gradient: const LinearGradient(colors: [
-                                      AppColors.whitewhite,
-                                      Colors.yellow,
-                                    ]),
+                                    gradient: const LinearGradient(colors: [AppColors.whitewhite, Colors.yellow]),
                                     onPressed: () {
-                                      setState(() {
-                                        _optionControllers
-                                            .add(TextEditingController());
-                                      });
+                                      setState(() => _optionControllers.add(TextEditingController()));
                                     },
                                     showIcon: false,
                                   ),
-                                  SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.width *
-                                              0.02),
+                                  SizedBox(height: MediaQuery.of(context).size.width * 0.02),
                                   GradientButton(
                                     text: 'VÁLASZ MENTÉSE',
-                                    gradient: const LinearGradient(colors: [
-                                      Colors.yellow,
-                                      AppColors.yellow,
-                                    ]),
+                                    gradient: const LinearGradient(colors: [Colors.yellow, AppColors.yellow]),
                                     onPressed: () async {
                                       List<String> values = [];
-                                      for (var controller
-                                          in _optionControllers) {
+                                      for (var controller in _optionControllers) {
                                         if (controller.text.isNotEmpty) {
                                           values.add(controller.text);
                                         }
                                       }
                                       if (values.isEmpty) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                              content:
-                                                  Text('Kérlek, válaszolj!')),
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(content: Text('Kérlek, válaszolj!')),
                                         );
                                         return;
                                       }
-                                      currentQuestion.userResponse =
-                                          values; // Save the answers to the current question
-                                      quizProvider.savePreviousAnswers(
-                                          values); // Save to provider
+                                      currentQuestion.userResponse = values;
+                                      quizProvider.savePreviousAnswers(values);
                                       saveAsnwere(currentQuestion);
                                       quizProvider.nextQuestion();
                                       _scrollToTop();
@@ -503,100 +431,54 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                                   ),
                                 ],
 
-                                // For Question 5.1 (index == 16)
-                                if (quizProvider.currentQuestion.index ==
-                                    16) ...[
+                                if (quizProvider.currentQuestion.index == 16) ...[
                                   if (quizProvider.previousAnswers.isNotEmpty)
                                     ListView.builder(
                                       shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount:
-                                          quizProvider.previousAnswers.length,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemCount: quizProvider.previousAnswers.length,
                                       itemBuilder: (context, index) {
                                         return Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0, vertical: 4.0),
+                                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                                           child: Row(
                                             children: [
-                                              // Display previous answer
                                               Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.35, // Narrower width
+                                                width: MediaQuery.of(context).size.width * 0.35,
                                                 decoration: BoxDecoration(
-                                                  color: Colors
-                                                      .white, // Background color set to white
-                                                  border: Border.all(
-                                                    color: Colors.grey.shade600,
-                                                    width: 1.0,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
+                                                  color: Colors.white,
+                                                  border: Border.all(color: Colors.grey.shade600, width: 1.0),
+                                                  borderRadius: BorderRadius.circular(8.0),
                                                 ),
                                                 child: ListTile(
                                                   title: Text(
-                                                    quizProvider
-                                                        .previousAnswers[index],
-                                                    style: TextStyle(
-                                                        color: Colors
-                                                            .grey.shade600),
+                                                    quizProvider.previousAnswers[index],
+                                                    style: TextStyle(color: Colors.grey.shade600),
                                                   ),
-                                                  tileColor: Colors
-                                                      .white, // Ensure tile background is white
+                                                  tileColor: Colors.white,
                                                 ),
                                               ),
-                                              SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.01), // Narrower spacing
-                                              // Input field for user response to the displayed answer
+                                              SizedBox(width: MediaQuery.of(context).size.width * 0.01),
                                               Expanded(
                                                 child: TextField(
-                                                  controller:
-                                                      _optionController52[
-                                                          index],
+                                                  controller: _optionController52[index],
                                                   decoration: InputDecoration(
                                                     hintText: 'A megoldás...',
                                                     filled: true,
-                                                    fillColor: Colors
-                                                        .white, // Background color set to white
+                                                    fillColor: Colors.white,
                                                     border: OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Colors.yellow,
-                                                          width:
-                                                              1.5), // Yellow outline
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.0),
+                                                      borderSide: BorderSide(color: Colors.yellow, width: 1.5),
+                                                      borderRadius: BorderRadius.circular(8.0),
                                                     ),
-                                                    enabledBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Colors.yellow,
-                                                          width:
-                                                              1.5), // Yellow outline
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.0),
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderSide: BorderSide(color: Colors.yellow, width: 1.5),
+                                                      borderRadius: BorderRadius.circular(8.0),
                                                     ),
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                          color: Colors.yellow,
-                                                          width:
-                                                              2.0), // Yellow outline
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.0),
+                                                    focusedBorder: OutlineInputBorder(
+                                                      borderSide: BorderSide(color: Colors.yellow, width: 2.0),
+                                                      borderRadius: BorderRadius.circular(8.0),
                                                     ),
                                                   ),
-                                                  style: TextStyle(
-                                                      color:
-                                                          Colors.grey.shade600),
+                                                  style: TextStyle(color: Colors.grey.shade600),
                                                 ),
                                               ),
                                             ],
@@ -604,39 +486,22 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                                         );
                                       },
                                     ),
-                                  SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.width *
-                                              0.02),
+                                  SizedBox(height: MediaQuery.of(context).size.width * 0.02),
                                   GradientButton(
                                     text: 'VÁLASZ MENTÉSE',
-                                    gradient: const LinearGradient(colors: [
-                                      Colors.yellow,
-                                      AppColors.yellow,
-                                    ]),
+                                    gradient: const LinearGradient(colors: [Colors.yellow, AppColors.yellow]),
                                     onPressed: () async {
-                                      if (quizProvider.previousAnswers.isEmpty)
-                                        return; // Early return if empty
+                                      if (quizProvider.previousAnswers.isEmpty) return;
 
                                       List<String> values = [];
-                                      for (int i = 0;
-                                          i <
-                                              quizProvider
-                                                  .previousAnswers.length;
-                                          i++) {
-                                        if (_optionController52[i]
-                                            .text
-                                            .isEmpty) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                                content: Text(
-                                                    'Kérlek, töltsd ki az összes mezőt!')),
+                                      for (int i = 0; i < quizProvider.previousAnswers.length; i++) {
+                                        if (_optionController52[i].text.isEmpty) {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(content: Text('Kérlek, töltsd ki az összes mezőt!')),
                                           );
                                           return;
                                         }
-                                        values.add(
-                                            '${quizProvider.previousAnswers[i]}%%${_optionController52[i].text}');
+                                        values.add('${quizProvider.previousAnswers[i]}%%${_optionController52[i].text}');
                                       }
                                       currentQuestion.userResponse = values;
                                       saveAsnwere(currentQuestion);
@@ -651,33 +516,26 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                           ] else if (currentQuestion.requiresRadioOptions) ...[
                             Column(
                               children: [
-                                ...currentQuestion.radioOptions
-                                    .map((radioOption) {
-                                  int index = currentQuestion.radioOptions
-                                      .indexOf(radioOption);
-                                  bool isSelected =
-                                      _selectedAnswerIndex == index;
+                                ...currentQuestion.radioOptions.map((radioOption) {
+                                  int index = currentQuestion.radioOptions.indexOf(radioOption);
+                                  bool isSelected = _selectedAnswerIndex == index;
                                   return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 24.0, vertical: 8.0),
+                                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
                                     child: Theme(
                                       data: Theme.of(context).copyWith(
                                         unselectedWidgetColor: Colors.grey,
                                         radioTheme: RadioThemeData(
-                                          fillColor:
-                                              MaterialStateColor.resolveWith(
-                                                  (states) => states.contains(
-                                                          MaterialState
-                                                              .selected)
-                                                      ? AppColors.yellow
-                                                      : Colors.grey),
+                                          fillColor: MaterialStateColor.resolveWith(
+                                                  (states) => states.contains(MaterialState.selected)
+                                                  ? AppColors.yellow
+                                                  : Colors.grey
+                                          ),
                                         ),
                                       ),
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
+                                          borderRadius: BorderRadius.circular(8.0),
                                           boxShadow: const [
                                             BoxShadow(
                                               color: Colors.black12,
@@ -687,9 +545,7 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                                             ),
                                           ],
                                           border: Border.all(
-                                            color: isSelected
-                                                ? Colors.yellow
-                                                : Colors.grey,
+                                            color: isSelected ? Colors.yellow : Colors.grey,
                                             width: 1.5,
                                           ),
                                         ),
@@ -698,9 +554,7 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                                           value: index,
                                           groupValue: _selectedAnswerIndex,
                                           onChanged: (int? value) {
-                                            setState(() {
-                                              _selectedAnswerIndex = value!;
-                                            });
+                                            setState(() => _selectedAnswerIndex = value!);
                                           },
                                         ),
                                       ),
@@ -711,105 +565,67 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                                   const SizedBox(height: 20.0),
                                   Text(
                                     currentQuestion.commentText,
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: Colors.grey.shade600,
-                                    ),
+                                    style: TextStyle(fontSize: 16.0, color: Colors.grey.shade600),
                                     textAlign: TextAlign.center,
                                   ),
                                   const SizedBox(height: 10.0),
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 24.0, vertical: 8.0),
+                                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
                                     child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.8,
+                                      width: MediaQuery.of(context).size.width * 0.8,
                                       child: TextField(
                                         controller: _commentController,
                                         decoration: InputDecoration(
                                           labelText: 'Megjegyzés...',
-                                          labelStyle: const TextStyle(
-                                              color: Colors.grey),
+                                          labelStyle: const TextStyle(color: Colors.grey),
                                           border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                            borderSide: BorderSide(
-                                                color: Colors.grey.shade600,
-                                                width: 1.5),
+                                            borderRadius: BorderRadius.circular(8.0),
+                                            borderSide: BorderSide(color: Colors.grey.shade600, width: 1.5),
                                           ),
                                           focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                            borderSide: const BorderSide(
-                                                color: Colors.yellow,
-                                                width: 1.5),
+                                            borderRadius: BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(color: Colors.yellow, width: 1.5),
                                           ),
                                           enabledBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                            borderSide: const BorderSide(
-                                                color: Colors.grey, width: 1.5),
+                                            borderRadius: BorderRadius.circular(8.0),
+                                            borderSide: const BorderSide(color: Colors.grey, width: 1.5),
                                           ),
                                           filled: true,
                                           fillColor: Colors.white,
                                         ),
-                                        style: TextStyle(
-                                            color: Colors.grey.shade600),
+                                        style: TextStyle(color: Colors.grey.shade600),
                                         maxLines: null,
                                       ),
                                     ),
                                   ),
                                 ],
-                                SizedBox(
-                                    height: MediaQuery.of(context).size.width *
-                                        0.02),
+                                SizedBox(height: MediaQuery.of(context).size.width * 0.02),
                                 GradientButton(
                                   text: 'TOVÁBB',
-                                  gradient: const LinearGradient(
-                                    colors: [Colors.yellow, AppColors.yellow],
-                                  ),
+                                  gradient: const LinearGradient(colors: [Colors.yellow, AppColors.yellow]),
                                   onPressed: () async {
                                     if (_selectedAnswerIndex != -1) {
                                       _sendAnswer(
                                           currentQuestion.index,
-                                          currentQuestion
-                                              .radioOptions[
-                                                  _selectedAnswerIndex]
-                                              .text,
-                                          currentQuestion.text);
-                                      currentQuestion.userResponse =
-                                          currentQuestion.allowsComment == true
-                                              ? [
-                                                  currentQuestion
-                                                      .radioOptions[
-                                                          _selectedAnswerIndex]
-                                                      .text,
-                                                  'comment:${_commentController.text}'
-                                                ]
-                                              : [
-                                                  currentQuestion
-                                                      .radioOptions[
-                                                          _selectedAnswerIndex]
-                                                      .text,
-                                                ];
-                                      print(
-                                          'Save answere ${currentQuestion.userResponse}');
+                                          currentQuestion.radioOptions[_selectedAnswerIndex].text,
+                                          currentQuestion.text
+                                      );
+                                      currentQuestion.userResponse = currentQuestion.allowsComment == true
+                                          ? [
+                                        currentQuestion.radioOptions[_selectedAnswerIndex].text,
+                                        'comment:${_commentController.text}'
+                                      ]
+                                          : [currentQuestion.radioOptions[_selectedAnswerIndex].text];
                                       saveAsnwere(currentQuestion);
-
                                       quizProvider.answerQuestion(
-                                          currentQuestion
-                                              .radioOptions[
-                                                  _selectedAnswerIndex]
-                                              .nextQuestionIndex);
+                                          currentQuestion.radioOptions[_selectedAnswerIndex].nextQuestionIndex
+                                      );
                                       _scrollToTop();
                                       if (quizProvider.isQuizFinished) {
-                                        await quizProvider
-                                            .saveUserResponse(answeerMap);
+                                        await quizProvider.saveUserResponse(answeerMap);
                                         Navigator.of(context).pushReplacement(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ModuleOpening_M3(
-                                                        'Azonosito',0)));
+                                            MaterialPageRoute(builder: (context) => ModuleOpening_M3('Azonosito',0))
+                                        );
                                       }
                                     }
                                   },
@@ -826,11 +642,7 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                                     Expanded(
                                       child: Center(
                                         child: Padding(
-                                          padding: EdgeInsets.only(
-                                              left: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.05),
+                                          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
                                           child: Text(
                                             currentQuestion.prosText,
                                             style: TextStyle(
@@ -846,11 +658,7 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                                     Expanded(
                                       child: Center(
                                         child: Padding(
-                                          padding: EdgeInsets.only(
-                                              right: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.05),
+                                          padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.05),
                                           child: Text(
                                             currentQuestion.consText,
                                             style: TextStyle(
@@ -865,352 +673,169 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(
-                                    height: MediaQuery.of(context).size.width *
-                                        0.02),
+                                SizedBox(height: MediaQuery.of(context).size.width * 0.02),
                                 Column(
                                   children: [
                                     is_hat_ketto
                                         ? SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.5,
-                                            child: ListView.builder(
-                                              shrinkWrap: true,
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              itemCount:
-                                                  _optionControllers2.length,
-                                              itemBuilder: (context, index) {
-                                                var controller =
-                                                    _optionControllers2[index];
-                                                var controller2 =
-                                                    _optionControllers3[index];
-                                                return Padding(
-                                                  key: ValueKey(controller),
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 8.0,
-                                                      vertical: 4.0),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Expanded(
-                                                        child: Padding(
-                                                          padding: EdgeInsets.only(
-                                                              left: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.01),
-                                                          child: TextField(
-                                                            controller:
-                                                                controller,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              labelText: '...',
-                                                              labelStyle: TextStyle(
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade600),
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.0),
-                                                                borderSide: BorderSide(
-                                                                    color: Colors
-                                                                        .grey
-                                                                        .shade600,
-                                                                    width: 1.5),
-                                                              ),
-                                                              focusedBorder:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.0),
-                                                                borderSide: const BorderSide(
-                                                                    color: Colors
-                                                                        .yellow,
-                                                                    width: 1.5),
-                                                              ),
-                                                              enabledBorder:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.0),
-                                                                borderSide:
-                                                                    const BorderSide(
-                                                                        color: Colors
-                                                                            .grey,
-                                                                        width:
-                                                                            1.5),
-                                                              ),
-                                                              filled: true,
-                                                              fillColor:
-                                                                  Colors.white,
-                                                            ),
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .grey
-                                                                    .shade800),
-                                                            maxLines: null,
-                                                          ),
+                                      width: MediaQuery.of(context).size.width * 0.5,
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        itemCount: _optionControllers2.length,
+                                        itemBuilder: (context, index) {
+                                          var controller = _optionControllers2[index];
+                                          var controller2 = _optionControllers3[index];
+                                          return Padding(
+                                            key: ValueKey(controller),
+                                            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.01),
+                                                    child: TextField(
+                                                      controller: controller,
+                                                      decoration: InputDecoration(
+                                                        labelText: '...',
+                                                        labelStyle: TextStyle(color: Colors.grey.shade600),
+                                                        border: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(8.0),
+                                                          borderSide: BorderSide(color: Colors.grey.shade600, width: 1.5),
                                                         ),
-                                                      ),
-                                                      SizedBox(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.1),
-                                                      Expanded(
-                                                        child: Padding(
-                                                          padding: EdgeInsets.only(
-                                                              right: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.01),
-                                                          child: TextField(
-                                                            controller:
-                                                                controller2,
-                                                            decoration:
-                                                                InputDecoration(
-                                                              labelText: '...',
-                                                              labelStyle: TextStyle(
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade600),
-                                                              border:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.0),
-                                                                borderSide: BorderSide(
-                                                                    color: Colors
-                                                                        .grey
-                                                                        .shade600,
-                                                                    width: 1.5),
-                                                              ),
-                                                              focusedBorder:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.0),
-                                                                borderSide: const BorderSide(
-                                                                    color: Colors
-                                                                        .yellow,
-                                                                    width: 1.5),
-                                                              ),
-                                                              enabledBorder:
-                                                                  OutlineInputBorder(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8.0),
-                                                                borderSide:
-                                                                    const BorderSide(
-                                                                        color: Colors
-                                                                            .grey,
-                                                                        width:
-                                                                            1.5),
-                                                              ),
-                                                              filled: true,
-                                                              fillColor:
-                                                                  Colors.white,
-                                                            ),
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .grey
-                                                                    .shade800),
-                                                            maxLines: null,
-                                                          ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(8.0),
+                                                          borderSide: const BorderSide(color: Colors.yellow, width: 1.5),
                                                         ),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(8.0),
+                                                          borderSide: const BorderSide(color: Colors.grey, width: 1.5),
+                                                        ),
+                                                        filled: true,
+                                                        fillColor: Colors.white,
                                                       ),
-                                                    ],
+                                                      style: TextStyle(color: Colors.grey.shade800),
+                                                      maxLines: null,
+                                                    ),
                                                   ),
-                                                );
-                                              },
+                                                ),
+                                                SizedBox(width: MediaQuery.of(context).size.width * 0.1),
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.01),
+                                                    child: TextField(
+                                                      controller: controller2,
+                                                      decoration: InputDecoration(
+                                                        labelText: '...',
+                                                        labelStyle: TextStyle(color: Colors.grey.shade600),
+                                                        border: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(8.0),
+                                                          borderSide: BorderSide(color: Colors.grey.shade600, width: 1.5),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(8.0),
+                                                          borderSide: const BorderSide(color: Colors.yellow, width: 1.5),
+                                                        ),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(8.0),
+                                                          borderSide: const BorderSide(color: Colors.grey, width: 1.5),
+                                                        ),
+                                                        filled: true,
+                                                        fillColor: Colors.white,
+                                                      ),
+                                                      style: TextStyle(color: Colors.grey.shade800),
+                                                      maxLines: null,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          )
+                                          );
+                                        },
+                                      ),
+                                    )
                                         : SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.5,
-                                            child: ListView.builder(
-                                              shrinkWrap: true,
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              itemCount:
-                                                  _optionControllers2.length,
-                                              itemBuilder: (context, index) {
-                                                var text2 =
-                                                    _optionControllers2[index]
-                                                        .text;
-                                                var text3 =
-                                                    _optionControllers3[index]
-                                                        .text;
-                                                return Padding(
-                                                  key: ValueKey(text2),
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 8.0,
-                                                      vertical: 4.0),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Expanded(
-                                                        child: Padding(
-                                                          padding: EdgeInsets.only(
-                                                              left: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.01),
-                                                          child: Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade600,
-                                                                  width: 2.0),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          8.0),
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: TextField(
-                                                              // Changed from Text to TextField
-                                                              controller:
-                                                                  _optionControllers2[
-                                                                      index], // Using the controller to allow input
-                                                              decoration:
-                                                                  InputDecoration(
-                                                                hintText:
-                                                                    'Kérlek, válaszolj!',
-                                                                border:
-                                                                    InputBorder
-                                                                        .none,
-                                                              ),
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade800),
-                                                            ),
-                                                          ),
-                                                        ),
+                                      width: MediaQuery.of(context).size.width * 0.5,
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        itemCount: _optionControllers2.length,
+                                        itemBuilder: (context, index) {
+                                          var text2 = _optionControllers2[index].text;
+                                          var text3 = _optionControllers3[index].text;
+                                          return Padding(
+                                            key: ValueKey(text2),
+                                            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.01),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        border: Border.all(color: Colors.grey.shade600, width: 2.0),
+                                                        borderRadius: BorderRadius.circular(8.0),
+                                                        color: Colors.white,
                                                       ),
-                                                      SizedBox(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.1),
-                                                      Expanded(
-                                                        child: Padding(
-                                                          padding: EdgeInsets.only(
-                                                              right: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.01),
-                                                          child: Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade600,
-                                                                  width: 2.0),
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          8.0),
-                                                              color:
-                                                                  Colors.white,
-                                                            ),
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: TextField(
-                                                              // Changed from Text to TextField
-                                                              controller:
-                                                                  _optionControllers3[
-                                                                      index], // Using the controller to allow input
-                                                              decoration:
-                                                                  InputDecoration(
-                                                                hintText:
-                                                                    'Kérlek, válaszolj!',
-                                                                border:
-                                                                    InputBorder
-                                                                        .none,
-                                                              ),
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade800),
-                                                            ),
-                                                          ),
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: TextField(
+                                                        controller: _optionControllers2[index],
+                                                        decoration: const InputDecoration(
+                                                          hintText: 'Kérlek, válaszolj!',
+                                                          border: InputBorder.none,
                                                         ),
+                                                        style: TextStyle(color: Colors.grey.shade800),
                                                       ),
-                                                    ],
+                                                    ),
                                                   ),
-                                                );
-                                              },
+                                                ),
+                                                SizedBox(width: MediaQuery.of(context).size.width * 0.1),
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.01),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        border: Border.all(color: Colors.grey.shade600, width: 2.0),
+                                                        borderRadius: BorderRadius.circular(8.0),
+                                                        color: Colors.white,
+                                                      ),
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: TextField(
+                                                        controller: _optionControllers3[index],
+                                                        decoration: const InputDecoration(
+                                                          hintText: 'Kérlek, válaszolj!',
+                                                          border: InputBorder.none,
+                                                        ),
+                                                        style: TextStyle(color: Colors.grey.shade800),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-// Button to add new pairs of text fields
-
+                                          );
+                                        },
+                                      ),
+                                    ),
                                     ...currentQuestion.answers.map((answer) {
                                       if (answer.isFillable) {
                                         return Column(
                                           children: [
-                                            SizedBox(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.02),
+                                            SizedBox(height: MediaQuery.of(context).size.width * 0.02),
                                             GradientButton(
                                               text: 'ÚJ MEGADÁSA',
-                                              gradient: const LinearGradient(
-                                                colors: [
-                                                  AppColors.whitewhite,
-                                                  Colors.yellow
-                                                ],
-                                              ),
+                                              gradient: const LinearGradient(colors: [AppColors.whitewhite, Colors.yellow]),
                                               onPressed: () {
                                                 setState(() {
-                                                  _optionControllers2.add(
-                                                      TextEditingController());
-                                                  _optionControllers3.add(
-                                                      TextEditingController());
+                                                  _optionControllers2.add(TextEditingController());
+                                                  _optionControllers3.add(TextEditingController());
                                                 });
                                               },
                                               showIcon: false,
                                             ),
-                                            SizedBox(
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.02),
+                                            SizedBox(height: MediaQuery.of(context).size.width * 0.02),
                                           ],
                                         );
                                       } else {
@@ -1220,73 +845,38 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                                     if (is_hat_ketto)
                                       GradientButton(
                                         text: 'TOVÁBB',
-                                        gradient: const LinearGradient(
-                                          colors: [
-                                            Colors.yellow,
-                                            AppColors.yellow
-                                          ],
-                                        ),
+                                        gradient: const LinearGradient(colors: [Colors.yellow, AppColors.yellow]),
                                         onPressed: () async {
                                           if (_optionControllers2.isEmpty) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(const SnackBar(
-                                              content: Text(
-                                                  'Írj legalább egy választ!'),
+                                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                              content: Text('Írj legalább egy választ!'),
                                             ));
-
                                             return;
                                           }
 
                                           List<String> combinedAnswers = [];
-
-                                          for (int i = 0;
-                                              i < _optionControllers2.length;
-                                              i++) {
-                                            // Combining two columns into a single answer per row
-                                            if (_optionControllers2[i]
-                                                    .text
-                                                    .isEmpty ||
-                                                _optionControllers3[i]
-                                                    .text
-                                                    .isEmpty) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                content:
-                                                    Text('Kérlek, válaszolj!'),
+                                          for (int i = 0; i < _optionControllers2.length; i++) {
+                                            if (_optionControllers2[i].text.isEmpty || _optionControllers3[i].text.isEmpty) {
+                                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                content: Text('Kérlek, válaszolj!'),
                                               ));
                                               return;
-                                              // break;
                                             }
-                                            String answerRow =
-                                                '${_optionControllers2[i].text}:${_optionControllers3[i].text}';
+                                            String answerRow = '${_optionControllers2[i].text}:${_optionControllers3[i].text}';
                                             combinedAnswers.add(answerRow);
                                           }
-                                          setState(() {
-                                            is_hat_ketto = true;
-                                          });
-                                          // Format: 1-answers;2-answers
-                                          String finalAnswer =
-                                              combinedAnswers.join(',');
-                                          currentQuestion.userResponse =
-                                              combinedAnswers;
+                                          setState(() => is_hat_ketto = true);
+                                          String finalAnswer = combinedAnswers.join(',');
+                                          currentQuestion.userResponse = combinedAnswers;
                                           saveAsnwere(currentQuestion);
-                                          print(
-                                              'here we got ans ${finalAnswer}   $combinedAnswers');
-                                          _sendAnswer(
-                                              currentQuestion.index,
-                                              finalAnswer,
-                                              currentQuestion.text);
+                                          _sendAnswer(currentQuestion.index, finalAnswer, currentQuestion.text);
                                           quizProvider.nextQuestion();
                                           _scrollToTop();
                                           if (quizProvider.isQuizFinished) {
-                                            await quizProvider
-                                                .saveUserResponse(answeerMap);
-                                            Navigator.of(context)
-                                                .pushReplacement(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ModuleOpening_M3(
-                                                                'Azonosito',0)));
+                                            await quizProvider.saveUserResponse(answeerMap);
+                                            Navigator.of(context).pushReplacement(
+                                                MaterialPageRoute(builder: (context) => ModuleOpening_M3('Azonosito',0))
+                                            );
                                           }
                                           _controller.clear();
                                         },
@@ -1294,9 +884,7 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                                       ),
                                   ],
                                 ),
-                                SizedBox(
-                                    height: MediaQuery.of(context).size.width *
-                                        0.02),
+                                SizedBox(height: MediaQuery.of(context).size.width * 0.02),
                               ],
                             ),
                           ] else
@@ -1304,26 +892,17 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                               if (answer.isScale) {
                                 return Column(
                                   children: [
-                                    SizedBox(
-                                        height:
-                                            MediaQuery.of(context).size.width *
-                                                0.02),
+                                    SizedBox(height: MediaQuery.of(context).size.width * 0.02),
                                     SliderTheme(
                                       data: SliderTheme.of(context).copyWith(
                                         trackHeight: 12.0,
                                         activeTrackColor: Colors.yellow,
-                                        inactiveTrackColor:
-                                            AppColors.whitewhite,
+                                        inactiveTrackColor: AppColors.whitewhite,
                                         thumbColor: Colors.grey.shade600,
-                                        overlayColor: Colors.grey.shade600
-                                            .withOpacity(0.2),
-                                        valueIndicatorColor:
-                                            Colors.grey.shade600,
-                                        thumbShape: const RoundSliderThumbShape(
-                                            enabledThumbRadius: 12.0),
-                                        overlayShape:
-                                            const RoundSliderOverlayShape(
-                                                overlayRadius: 15.0),
+                                        overlayColor: Colors.grey.shade600.withOpacity(0.2),
+                                        valueIndicatorColor: Colors.grey.shade600,
+                                        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12.0),
+                                        overlayShape: const RoundSliderOverlayShape(overlayRadius: 15.0),
                                       ),
                                       child: Slider(
                                         value: _sliderValue,
@@ -1332,51 +911,25 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                                         divisions: 10,
                                         label: _sliderValue.round().toString(),
                                         onChanged: (double value) {
-                                          setState(() {
-                                            _sliderValue = value;
-                                          });
+                                          setState(() => _sliderValue = value);
                                         },
                                       ),
                                     ),
-                                    SizedBox(
-                                        height:
-                                            MediaQuery.of(context).size.width *
-                                                0.02),
+                                    SizedBox(height: MediaQuery.of(context).size.width * 0.02),
                                     GradientButton(
                                       text: 'TOVÁBB',
-                                      gradient: const LinearGradient(
-                                        colors: [
-                                          Colors.yellow,
-                                          AppColors.yellow
-                                        ],
-                                      ),
+                                      gradient: const LinearGradient(colors: [Colors.yellow, AppColors.yellow]),
                                       onPressed: () async {
-                                        print(
-                                            '===============${quizProvider.isQuizFinished}');
-                                        _sendAnswer(
-                                            currentQuestion.index,
-                                            _sliderValue.toString(),
-                                            currentQuestion.text);
-                                        currentQuestion.userResponse = [
-                                          _sliderValue.toString()
-                                        ];
+                                        _sendAnswer(currentQuestion.index, _sliderValue.toString(), currentQuestion.text);
+                                        currentQuestion.userResponse = [_sliderValue.toString()];
                                         saveAsnwere(currentQuestion);
-                                        quizProvider.answerQuestion(
-                                            answer.nextQuestionIndex);
-                                        // quizProvider1.nextQuestion();
-                                        print(
-                                            'finish ${quizProvider.isQuizFinished}');
-
+                                        quizProvider.answerQuestion(answer.nextQuestionIndex);
                                         _scrollToTop();
-
                                         if (quizProvider.isQuizFinished) {
-                                          await quizProvider
-                                              .saveUserResponse(answeerMap);
+                                          await quizProvider.saveUserResponse(answeerMap);
                                           Navigator.of(context).pushReplacement(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ModuleOpening_M3(
-                                                          'Azonosito',0)));
+                                              MaterialPageRoute(builder: (context) => ModuleOpening_M3('Azonosito',0))
+                                          );
                                         }
                                       },
                                       showIcon: true,
@@ -1388,13 +941,9 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                                   children: [
                                     Center(
                                       child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(20.0),
+                                        borderRadius: BorderRadius.circular(20.0),
                                         child: Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20.0),
-                                          ),
+                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
                                           child: SizedBox(
                                             child: HtmlWidget(
                                               '<video controls controlsList="nodownload" style="border:none; margin:0; padding:0; width:100%; height:100%;" src="${answer.video}"></video>',
@@ -1403,35 +952,19 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
-                                        height:
-                                            MediaQuery.of(context).size.width *
-                                                0.02),
+                                    SizedBox(height: MediaQuery.of(context).size.width * 0.02),
                                     GradientButton(
                                       text: 'MEGNÉZTEM',
-                                      gradient: const LinearGradient(
-                                        colors: [
-                                          Colors.yellow,
-                                          AppColors.yellow
-                                        ],
-                                      ),
+                                      gradient: const LinearGradient(colors: [Colors.yellow, AppColors.yellow]),
                                       onPressed: () async {
-                                        _sendAnswer(
-                                            currentQuestion.index,
-                                            "Watched Video",
-                                            currentQuestion.text);
-                                        print(
-                                            'Here is index ${answer.nextQuestionIndex}');
+                                        _sendAnswer(currentQuestion.index, "Watched Video", currentQuestion.text);
                                         quizProvider.nextQuestion();
                                         _scrollToTop();
                                         if (quizProvider.isQuizFinished) {
-                                          await quizProvider
-                                              .saveUserResponse(answeerMap);
+                                          await quizProvider.saveUserResponse(answeerMap);
                                           Navigator.of(context).pushReplacement(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ModuleOpening_M3(
-                                                          'Azonosito',0)));
+                                              MaterialPageRoute(builder: (context) => ModuleOpening_M3('Azonosito',0))
+                                          );
                                         }
                                       },
                                       showIcon: true,
@@ -1443,221 +976,126 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                             }).toList(),
                           if (currentQuestion.requiresTable) ...[
                             Container(
-                                width: MediaQuery.of(context).size.width * 0.85,
-                                height:
-                                    MediaQuery.of(context).size.width * 0.30,
-                                //width: MediaQuery.of(context).size.width * 0.2,
-                                // Make the cells narrower
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  // Background color for the container
-                                  border: Border.all(
-                                      color: Colors.grey.shade600, width: 1.0),
-                                  // Border color and width
-                                  borderRadius: BorderRadius.circular(
-                                      8.0), // Border radius
-                                ),
-                                child:
-                                    //ReorderableListView(
-                                    ListView(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  children: [
-                                    // Header row
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0, vertical: 4.0),
-                                      child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.7,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                              color: Colors.grey.shade600,
-                                              width: 1.0),
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
+                              width: MediaQuery.of(context).size.width * 0.85,
+                              height: MediaQuery.of(context).size.width * 0.30,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                border: Border.all(color: Colors.grey.shade600, width: 1.0),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: ListView(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width * 0.7,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(color: Colors.grey.shade600, width: 1.0),
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: MediaQuery.of(context).size.width * 0.1,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              border: Border.all(color: Colors.grey.shade600, width: 1.0),
+                                              borderRadius: BorderRadius.circular(8.0),
+                                            ),
+                                            child: ListTile(
+                                              title: Text("idősáv", style: TextStyle(color: Colors.grey.shade800)),
+                                              tileColor: Colors.grey.shade100,
+                                            ),
+                                          ),
+                                          for (int i = 1; i <= 7; i++)
                                             Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.1,
+                                              width: MediaQuery.of(context).size.width * 0.05,
                                               decoration: BoxDecoration(
                                                 color: Colors.white,
-                                                border: Border.all(
-                                                    color: Colors.grey.shade600,
-                                                    width: 1.0),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
+                                                border: Border.all(color: Colors.grey.shade600, width: 1.0),
+                                                borderRadius: BorderRadius.circular(8.0),
                                               ),
                                               child: ListTile(
-                                                title: Text(
-                                                  "idősáv",
-                                                  style: TextStyle(
-                                                      color:
-                                                          Colors.grey.shade800),
-                                                ),
+                                                title: Text("$i.nap", style: TextStyle(color: Colors.grey.shade800)),
                                                 tileColor: Colors.grey.shade100,
                                               ),
                                             ),
-                                            for (int i = 1; i <= 7; i++)
-                                              Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.05,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  border: Border.all(
-                                                      color:
-                                                          Colors.grey.shade600,
-                                                      width: 1.0),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
-                                                ),
-                                                child: ListTile(
-                                                  title: Text(
-                                                    "$i.nap",
-                                                    style: TextStyle(
-                                                        color: Colors
-                                                            .grey.shade800),
-                                                  ),
-                                                  tileColor:
-                                                      Colors.grey.shade100,
-                                                ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  for (int index = 0; index < _rankableOptions_.length; index++)
+                                    Padding(
+                                      key: ValueKey(_rankableOptions_[index]),
+                                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width * 0.7,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(color: Colors.grey.shade600, width: 1.0),
+                                          borderRadius: BorderRadius.circular(8.0),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              width: MediaQuery.of(context).size.width * 0.1,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                border: Border.all(color: Colors.grey.shade600, width: 1.0),
+                                                borderRadius: BorderRadius.circular(8.0),
                                               ),
+                                              child: ListTile(
+                                                title: Text(felirat_most[_Types[index]]!, style: TextStyle(color: Colors.grey.shade800)),
+                                                tileColor: Colors.grey.shade100,
+                                              ),
+                                            ),
+                                            for (int i = 0; i < 7; i++)
+                                              Builder(builder: (context) {
+                                                var myController = matrix[index][i];
+                                                return Container(
+                                                  width: MediaQuery.of(context).size.width * 0.05,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    border: Border.all(color: Colors.grey.shade600, width: 1.0),
+                                                    borderRadius: BorderRadius.circular(8.0),
+                                                  ),
+                                                  child: ListTile(
+                                                    title: TextField(
+                                                      controller: myController,
+                                                      style: TextStyle(color: Colors.grey.shade800),
+                                                    ),
+                                                    tileColor: Colors.grey.shade100,
+                                                  ),
+                                                );
+                                              }),
                                           ],
                                         ),
                                       ),
                                     ),
-                                    // Original rows
-                                    for (int index = 0;
-                                        index < _rankableOptions_.length;
-                                        index++)
-                                      Padding(
-                                        key: ValueKey(_rankableOptions_[index]),
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0, vertical: 4.0),
-                                        child: Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.7,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            border: Border.all(
-                                                color: Colors.grey.shade600,
-                                                width: 1.0),
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.1,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  border: Border.all(
-                                                      color:
-                                                          Colors.grey.shade600,
-                                                      width: 1.0),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
-                                                ),
-                                                child: ListTile(
-                                                  title: Text(
-                                                    felirat_most[
-                                                        _Types[index]]!,
-                                                    style: TextStyle(
-                                                        color: Colors
-                                                            .grey.shade800),
-                                                  ),
-                                                  tileColor:
-                                                      Colors.grey.shade100,
-                                                ),
-                                              ),
-                                              for (int i = 0; i < 7; i++)
-                                                Builder(builder: (context) {
-                                                  var myController =
-                                                      matrix[index][i];
-                                                  // print('hhhh  $index  $i');
-
-                                                  return Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.05,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      border: Border.all(
-                                                          color: Colors
-                                                              .grey.shade600,
-                                                          width: 1.0),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.0),
-                                                    ),
-                                                    child: ListTile(
-                                                      title: TextField(
-                                                        controller:
-                                                            myController,
-                                                        style: TextStyle(
-                                                            color: Colors
-                                                                .grey.shade800),
-                                                      ),
-                                                      tileColor:
-                                                          Colors.grey.shade100,
-                                                    ),
-                                                  );
-                                                }),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                )),
-                            SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.width * 0.02),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: MediaQuery.of(context).size.width * 0.02),
                             GradientButton(
                               text: 'TOVÁBB',
-                              gradient: const LinearGradient(
-                                colors: [Colors.yellow, AppColors.yellow],
-                              ),
+                              gradient: const LinearGradient(colors: [Colors.yellow, AppColors.yellow]),
                               onPressed: () async {
                                 bool hasValue = false;
                                 List<String> enterValues = [];
-                                for (int index = 0;
-                                    index < _rankableOptions_.length;
-                                    index++) {
+                                for (int index = 0; index < _rankableOptions_.length; index++) {
                                   for (int i = 0; i < 7; i++) {
                                     enterValues.add(matrix[index][i].text);
-                                    if (matrix[index][i].text.isNotEmpty) {
-                                      hasValue = true;
-                                      // break;
-                                    }
+                                    if (matrix[index][i].text.isNotEmpty) hasValue = true;
                                   }
-                                  // if (hasValue) break;
                                 }
                                 if (hasValue) {
-                                  _sendAnswer(currentQuestion.index,
-                                      _controller.text, currentQuestion.text);
+                                  _sendAnswer(currentQuestion.index, _controller.text, currentQuestion.text);
                                   currentQuestion.userResponse = enterValues;
-                                  print('${currentQuestion.userResponse}');
                                   saveAsnwere(currentQuestion);
                                   quizProvider.nextQuestion();
                                   _scrollToTop();
@@ -1666,110 +1104,64 @@ class _QuizScreenState2 extends State<QuizScreen2> {
                                 }
 
                                 if (quizProvider.isQuizFinished) {
-                                  await quizProvider
-                                      .saveUserResponse(answeerMap);
+                                  await quizProvider.saveUserResponse(answeerMap);
                                   Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              ModuleOpening_M3('Azonosito',0)));
-
+                                      MaterialPageRoute(builder: (context) => ModuleOpening_M3('Azonosito',0))
+                                  );
                                   _controller.clear();
                                 }
-                                // else {
-                                //   ScaffoldMessenger.of(context).showSnackBar(
-                                //     const SnackBar(
-                                //         content:
-                                //             Text('Kérlek, írd be a válaszod!')),
-                                //   );
-                                // }
-                                print(currentQuestion.index);
                               },
                               showIcon: true,
                             ),
                           ],
 
-                          // ADAM tette be es kesobb kiveheto
                           if (currentQuestion.requiresTableBigger) ...[
                             Container(
-                              width: MediaQuery.of(context).size.width *
-                                  0.75, // Smaller width
-                              height: MediaQuery.of(context).size.width *
-                                  0.25, // Smaller height
+                              width: MediaQuery.of(context).size.width * 0.75,
+                              height: MediaQuery.of(context).size.width * 0.25,
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                border: Border.all(
-                                    color: Colors.grey.shade600, width: 1.0),
+                                border: Border.all(color: Colors.grey.shade600, width: 1.0),
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                               child: ListView(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 children: [
-                                  // Header row
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 6.0,
-                                        vertical: 2.0), // Adjust padding
+                                    padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
                                     child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.65, // Smaller width
+                                      width: MediaQuery.of(context).size.width * 0.65,
                                       decoration: BoxDecoration(
                                         color: Colors.white,
-                                        border: Border.all(
-                                            color: Colors.grey.shade600,
-                                            width: 1.0),
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
+                                        border: Border.all(color: Colors.grey.shade600, width: 1.0),
+                                        borderRadius: BorderRadius.circular(8.0),
                                       ),
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          // "idősáv" column
                                           Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.08, // Adjusted width
+                                            width: MediaQuery.of(context).size.width * 0.08,
                                             decoration: BoxDecoration(
                                               color: Colors.white,
-                                              border: Border.all(
-                                                  color: Colors.grey.shade600,
-                                                  width: 1.0),
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
+                                              border: Border.all(color: Colors.grey.shade600, width: 1.0),
+                                              borderRadius: BorderRadius.circular(8.0),
                                             ),
                                             child: ListTile(
-                                              title: Text(
-                                                "idősáv",
-                                                style: TextStyle(
-                                                    color:
-                                                        Colors.grey.shade800),
-                                              ),
+                                              title: Text("idősáv", style: TextStyle(color: Colors.grey.shade800)),
                                               tileColor: Colors.grey.shade100,
                                             ),
                                           ),
                                           if (currentQuestion.extra == true)
                                             Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.08, // Adjusted width
+                                              width: MediaQuery.of(context).size.width * 0.08,
                                               decoration: BoxDecoration(
                                                 color: Colors.white,
-                                                border: Border.all(
-                                                    color: Colors.grey.shade600,
-                                                    width: 1.0),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
+                                                border: Border.all(color: Colors.grey.shade600, width: 1.0),
+                                                borderRadius: BorderRadius.circular(8.0),
                                               ),
                                               child: ListTile(
-                                                title: Text(
-                                                  "új mozgás vagy intenzitásnövelés?",
-                                                  style: TextStyle(
-                                                      color:
-                                                          Colors.grey.shade800),
-                                                ),
+                                                title: Text("új mozgás vagy intenzitásnövelés?", style: TextStyle(color: Colors.grey.shade800)),
                                                 tileColor: Colors.grey.shade100,
                                               ),
                                             ),
@@ -2658,6 +2050,21 @@ class _QuizScreenState2 extends State<QuizScreen2> {
           ],
         ),
       ),
+
+          // Floating back button
+          if (quizProvider.currentQuestion.index > 0)
+            Positioned(
+              bottom: 20,
+              left: MediaQuery.of(context).size.width - 100,
+              child: FloatingActionButton(
+                backgroundColor: Colors.yellow,
+                onPressed: () => _handleBackButton(quizProvider),
+                child: const Icon(Icons.arrow_back, color: Colors.black),
+              ),
+            ),
+
+      ],
+    )
     );
   }
 }

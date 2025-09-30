@@ -69,9 +69,10 @@ class QuizProvider5 with ChangeNotifier {
       nooption: true,
       steptoquestion: 6,
     ),
+    /*
     Question(
       twoColumn: false,
-      text: '1.1. kérdés: Kérlek írd le, mikor, kivel és mennyit mozogtál az elmúlt héten.',
+      text: 'Kérlek írd le, mikor, kivel és mennyit mozogtál az elmúlt héten.',
       index: 5,
       requiresTableBigger: true,
       requiresTextInput: false,
@@ -79,9 +80,32 @@ class QuizProvider5 with ChangeNotifier {
       extra: true,
       answers: [],
     ),
+
+
+       Question(
+      twoColumn: false,
+      text: 'Kérlek írd le, mikor, kivel és mennyit mozogtál az elmúlt héten.',
+      index: 5,
+      requiresTextInput: true,
+      answers: [],
+    ),
+
+     */
     Question(
       twoColumn: false,
-      text: '1.2. kérdés: Pár hete beszéltünk olyan aktivitásokról, melyek segíthetik hosszútávon fenntartani a mozgással kapcsolatos motivációd. Melyik módszerrel próbálkoztás eddig, melyik vált be?',
+      text: 'Kérlek írd le, mikor, kivel és mennyit mozogtál az elmúlt héten.',
+      index: 5,
+      requiresTableBigger: true,
+      requiresTextInput: false,
+      check: true,
+      extra: true,
+      answers: [],
+    ),
+
+
+    Question(
+      twoColumn: false,
+      text: 'Pár hete beszéltünk olyan aktivitásokról, melyek segíthetik hosszútávon fenntartani a mozgással kapcsolatos motivációd. Melyik módszerrel próbálkoztás eddig, melyik vált be?',
       index: 6,
       requiresCheckOptions: true,
       checkOptions: [
@@ -97,7 +121,7 @@ class QuizProvider5 with ChangeNotifier {
     ),
     Question(
       twoColumn: false,
-      text: '1.3. kérdés: Melyik stratégiát alkalmaztad eddig?',
+      text: 'Melyik stratégiát alkalmaztad eddig?',
       index: 7,
       requiresCheckOptions: true,
       checkOptions: [
@@ -113,7 +137,7 @@ class QuizProvider5 with ChangeNotifier {
     ),
       Question(
       twoColumn: false,
-      text: '1.4. kérdés: Írd le, hogy hogyan és mikor alkalmaztad az adott stratégiát!',
+      text: 'Írd le, hogy hogyan és mikor alkalmaztad az adott stratégiát!',
       index: 8,
       requiresTextInput: true,
       answers: [],
@@ -129,19 +153,40 @@ class QuizProvider5 with ChangeNotifier {
       radioOptions: [
         RadioOption(text: 'Mozgásra fel!', nextQuestionIndex: 10),
       ],
+      //],
       answers: [],    ),
 
+      Question(
+        twoColumn: false,
+        text:
+        'Ez a kérdőív véget ért. \n \n Köszönjük a válaszaidat!',
+        index: 10,
+        answers: [],
+        //answers: [Answer(nextQuestionIndex: 27)],
+      ),
   ];
 
   int _currentQuestionIndex = 0;
   int _score = 0;
 
-  Question get currentQuestion => _questions[_currentQuestionIndex];
+  //Question get currentQuestion => _questions[_currentQuestionIndex];
+  Question get currentQuestion {
+    if (_currentQuestionIndex < 0 || _currentQuestionIndex >= _questions.length) {
+      return Question(
+        text: "A kérdőív véget ért",
+        index: -1,
+        requiresTextInput: false,
+        answers: [], twoColumn: false,
+      );
+    }
+    return _questions[_currentQuestionIndex];
+  }
 
   bool get isQuizFinished => _currentQuestionIndex >= _questions.length;
 
   int get score => _score;
 
+  /*
   void answerQuestion(int nextQuestionIndex) {
     if (nextQuestionIndex <= _questions.length) {
       _currentQuestionIndex = nextQuestionIndex;
@@ -150,6 +195,18 @@ class QuizProvider5 with ChangeNotifier {
     }
     _score++;
     notifyListeners();
+  }
+   */
+  void answerQuestion(int nextQuestionIndex) {
+    if (nextQuestionIndex >= 0 && nextQuestionIndex < _questions.length) {
+      _currentQuestionIndex = nextQuestionIndex;
+      notifyListeners();
+    } else {
+      // Kérdőív vége kezelése
+      _currentQuestionIndex = _questions.length;
+      notifyListeners();
+      // Ide jöhet egy callback vagy navigáció
+    }
   }
 
 

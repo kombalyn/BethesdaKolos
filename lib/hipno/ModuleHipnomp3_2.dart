@@ -13,7 +13,9 @@ export '../home_page_model.dart';
 
 
 class ModuleHipnomp3_2 extends StatelessWidget {
-  const ModuleHipnomp3_2({super.key});
+
+  String Azonosito = '';
+  ModuleHipnomp3_2(String s, {super.key}){Azonosito=s;}
 
   // This widget is the root of your application.
   @override

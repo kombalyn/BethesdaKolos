@@ -71,14 +71,16 @@ class _HomePageWidgetEmailState extends State<HomePageWidgetEmail> {
   }
 
   void _launchURL(String url) async {
-    if (!await canLaunch(url)) {
+    // Check if the URL can be launched
+    final Uri uri = Uri.parse(url);
+    if (!await canLaunchUrl(uri)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Could not launch $url'),
+          content: Text('A következő oldal nem nyitható meg: $url'),
         ),
       );
     } else {
-      await launch(url);
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
   }
 
@@ -88,7 +90,7 @@ class _HomePageWidgetEmailState extends State<HomePageWidgetEmail> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
-      //  appBar:   CustomAppBar(title: 'Kutatási fázis'),
+        //  appBar:   CustomAppBar(title: 'Kutatási fázis'),
 
         backgroundColor: AppColors.lightshade,
         body: SingleChildScrollView(
@@ -151,14 +153,38 @@ class _HomePageWidgetEmailState extends State<HomePageWidgetEmail> {
                   child: Column(
                     children: [
                       SizedBox(height: MediaQuery.of(context).size.width * 0.03),
+
+                      // EZ AZ ÚJ KÓD: A beágyazott kérdőív helyett egy gombbal nyílik meg
                       Center(
-                        child: Container(
-                          height: MediaQuery.of(context).size.width * 0.7, // Adjusted height
-                          child: HtmlWidget(
-                            '<iframe style="border:none; margin:0; padding:0; width:100%; height:100%;" src="https://redcapdemo.vumc.org/surveys/?s=YN98PRHNDJAD8T3P" frameborder="0"></iframe>',
-                          ),
+                        child: Text(
+                          "Kérjük, kattints az alábbi gombra a kérdőív kitöltéséhez.",
+                          textAlign: TextAlign.center,
+                          style: MyTextStyles.nagybekezdes(context),
                         ),
                       ),
+                      SizedBox(height: MediaQuery.of(context).size.width * 0.02),
+                      ElevatedButton(
+                        onPressed: () {
+                          _launchURL('https://8080-cs-6f0bc9d6-03ef-40c1-855d-bea101900242.cs-europe-west4-fycr.cloudshell.dev/map');
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(AppColors.bethesdacolor),
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                            EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                          ),
+                        ),
+                        child: Text(
+                          "Ugrás a kérdőívre",
+                          style: MyTextStyles.gomb(context),
+                        ),
+                      ),
+                      // EZ AZ ÚJ KÓD VÉGE
+
                       SizedBox(height: MediaQuery.of(context).size.width * 0.01),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.01), // Adjust the horizontal padding as needed

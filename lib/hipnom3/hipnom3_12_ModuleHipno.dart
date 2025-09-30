@@ -114,7 +114,7 @@ class _hipnom3_ModuleHipnotState extends State<hipnom3_ModuleHipnoWidget> {
   Future<void> szamokBbeallitas()async {
     _channel = WebSocketChannel.connect(
       //Uri.parse('wss://34.72.67.6:8089'),
-      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
+      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
     );
     _channel.sink.add("szamlekerdezes|$Azonosito,mp3_3");
     // //_channel.sink.add("mp3|$azonosito-$hangfajlszam");
@@ -137,7 +137,7 @@ class _hipnom3_ModuleHipnotState extends State<hipnom3_ModuleHipnoWidget> {
 
     _channel = WebSocketChannel.connect(
       //Uri.parse('wss://34.72.67.6:8089'),
-      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
+      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
     );
     _channel.sink.add("szamlekerdezes|$Azonosito,mp3_3"); //TODO ez majd mp3_2
     // //_channel.sink.add("mp3|$azonosito-$hangfajlszam");
@@ -160,7 +160,7 @@ class _hipnom3_ModuleHipnotState extends State<hipnom3_ModuleHipnoWidget> {
 
     _channel = WebSocketChannel.connect(
       //Uri.parse('wss://34.72.67.6:8089'),
-      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
+      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
     );
     _channel.sink.add("szamlekerdezes|$Azonosito,mp3_3"); //TODO ez majd mp3_2
     // //_channel.sink.add("mp3|$azonosito-$hangfajlszam");
@@ -185,22 +185,30 @@ class _hipnom3_ModuleHipnotState extends State<hipnom3_ModuleHipnoWidget> {
 
   late WebSocketChannel _channel = WebSocketChannel.connect(
     //Uri.parse('wss://34.72.67.6:8089'),
-    Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
+    Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
   );
 
-  int szam_lekerdezes(){
-    int vissz = -1;
+  Future<String> szam_lekerdezes() async{
+    String vissz = "-1";
     print("uzenet elkuldve");
     _channel = WebSocketChannel.connect(
       //Uri.parse('wss://34.72.67.6:8089'),
-      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
+      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
     );
-
-    _channel.sink.add("szamlekerdezes|XY978,mp3_1") ;
+    _channel.sink.add("szamlekerdezes|$Azonosito,mp3_1") ;
     // //_channel.sink.add("mp3|$azonosito-$hangfajlszam");
     _channel.stream.listen((message) {
       print('Received message: $message');
-      vissz = int.parse("$message");
+
+      // Kapcsos zárójelek eltávolítása
+      String cleanMessage = message.replaceAll(RegExp(r'[{}]'), "");
+      try {
+        // Számra konvertálás
+        vissz = cleanMessage;
+        print("vissz " + vissz);
+      } catch (e) {
+        print('Error: $e');
+      }
     });
     return vissz;
   }
@@ -1824,7 +1832,7 @@ class _hipnom3_ModuleHipnotState extends State<hipnom3_ModuleHipnoWidget> {
                                             MyTextStyles.kicsibekezdes(context),
                                       ),
                                       Text(
-                                        szam_lekerdezes() as String,
+                                        szam1,
                                         style: MyTextStyles.kicsigreenbekezdes(
                                             context),
                                       ),
@@ -1985,7 +1993,7 @@ class _hipnom3_ModuleHipnotState extends State<hipnom3_ModuleHipnoWidget> {
                                             MyTextStyles.kicsibekezdes(context),
                                       ),
                                       Text(
-                                        szam_lekerdezes() as String,
+                                        szam2,
                                         style: MyTextStyles.kicsigreenbekezdes(
                                             context),
                                       ),

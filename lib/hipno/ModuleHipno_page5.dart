@@ -114,7 +114,7 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
 
   late WebSocketChannel _channel = WebSocketChannel.connect(
     //Uri.parse('wss://34.72.67.6:8089'),
-    Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
+    Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
   );
 
   String szam1 = "-1";
@@ -134,16 +134,23 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
   String szam15 = "-1";
 
 
+
   String adott_mp_lekerese(String mpfile){
     String szam = "-1";
     _channel = WebSocketChannel.connect(
       //Uri.parse('wss://34.72.67.6:8089'),
-      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8089'),
+      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
     );
     _channel.sink.add("szamlekerdezes|$Azonosito,$mpfile");
     // //_channel.sink.add("mp3|$azonosito-$hangfajlszam");
     _channel.stream.listen((message) {
       print('Received message: $message');
+
+      if(message=="0"){
+        setState(() {
+          szam = "0";
+        });
+      }
 
       // Kapcsos zárójelek eltávolítása
       String cleanMessage = message.replaceAll(RegExp(r'[{}]'), "");
@@ -158,6 +165,7 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
   }
 
 
+  /*
   Future<void> szamokBbeallitas()async {
 
     setState(() {
@@ -177,7 +185,136 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
       szam14 = adott_mp_lekerese("mp3_26");
       szam15 = adott_mp_lekerese("mp3_27");
     });
+  }
+   */
 
+
+  Future<void> szamokBbeallitas()async {
+
+
+    _channel = WebSocketChannel.connect(
+      //Uri.parse('wss://34.72.67.6:8889'),
+      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
+    );
+    print("channel_azonosito $Azonosito");
+    _channel.sink.add("szamlekerdezes|$Azonosito,mp3_1") ;
+    // //_channel.sink.add("mp3|$azonosito-$hangfajlszam");
+    _channel.stream.listen((message) {
+      print('Received message: $message');
+
+      // Kapcsos zárójelek eltávolítása
+      String cleanMessage = message.replaceAll(RegExp(r'[{}]'), "");
+      try {
+        // Számra konvertálás
+        setState(() {
+          szam11 = cleanMessage;
+        });
+
+        print("vissz " + szam11);
+      } catch (e) {
+        print('Error: $e');
+      }
+    });
+
+
+    _channel = WebSocketChannel.connect(
+      //Uri.parse('wss://34.72.67.6:8889'),
+      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
+    );
+    print("channel_azonosito $Azonosito");
+    _channel.sink.add("szamlekerdezes|$Azonosito,mp3_2") ;
+    // //_channel.sink.add("mp3|$azonosito-$hangfajlszam");
+    _channel.stream.listen((message) {
+      print('Received message: $message');
+
+      // Kapcsos zárójelek eltávolítása
+      String cleanMessage = message.replaceAll(RegExp(r'[{}]'), "");
+      try {
+        // Számra konvertálás
+        setState(() {
+          szam12 = cleanMessage;
+        });
+
+        print("vissz " + szam12);
+      } catch (e) {
+        print('Error: $e');
+      }
+    });
+
+    _channel = WebSocketChannel.connect(
+      //Uri.parse('wss://34.72.67.6:8889'),
+      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
+    );
+    print("channel_azonosito $Azonosito");
+    _channel.sink.add("szamlekerdezes|$Azonosito,mp3_3") ;
+    // //_channel.sink.add("mp3|$azonosito-$hangfajlszam");
+    _channel.stream.listen((message) {
+      print('Received message: $message');
+
+      // Kapcsos zárójelek eltávolítása
+      String cleanMessage = message.replaceAll(RegExp(r'[{}]'), "");
+      try {
+        // Számra konvertálás
+        setState(() {
+          szam13 = cleanMessage;
+        });
+
+        print("vissz " + szam13);
+      } catch (e) {
+        print('Error: $e');
+      }
+    });
+
+    _channel = WebSocketChannel.connect(
+      //Uri.parse('wss://34.72.67.6:8889'),
+      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
+    );
+    print("channel_azonosito $Azonosito");
+    _channel.sink.add("szamlekerdezes|$Azonosito,mp3_4") ;
+    // //_channel.sink.add("mp3|$azonosito-$hangfajlszam");
+    _channel.stream.listen((message) {
+      print('Received message: $message');
+
+      // Kapcsos zárójelek eltávolítása
+      String cleanMessage = message.replaceAll(RegExp(r'[{}]'), "");
+      try {
+        // Számra konvertálás
+        setState(() {
+          szam14 = cleanMessage;
+        });
+
+        print("vissz " + szam14);
+      } catch (e) {
+        print('Error: $e');
+      }
+    });
+
+    _channel = WebSocketChannel.connect(
+      //Uri.parse('wss://34.72.67.6:8889'),
+      Uri.parse('wss://szerver.hasifajdalomkezeles.hu:8889'),
+    );
+    print("channel_azonosito $Azonosito");
+    _channel.sink.add("szamlekerdezes|$Azonosito,mp3_5") ;
+    // //_channel.sink.add("mp3|$azonosito-$hangfajlszam");
+    _channel.stream.listen((message) {
+      print('Received message: $message');
+
+      // Kapcsos zárójelek eltávolítása
+      String cleanMessage = message.replaceAll(RegExp(r'[{}]'), "");
+      try {
+        // Számra konvertálás
+        setState(() {
+          szam15 = cleanMessage;
+        });
+
+        print("vissz " + szam15);
+      } catch (e) {
+        print('Error: $e');
+      }
+    });
+
+    //szam1 = await szam_lekerdezes();
+    //szam2 = await szam_lekerdezes();
   }
 
 
@@ -195,6 +332,7 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
     _model = HomePageModel();
 
 
+    //szamokBbeallitas();
     szamokBbeallitas();
     /*
     _controller = _controller = VideoPlayerController.asset('assets/videos/kronikus_hasi_fajdalom.mp4')
@@ -231,23 +369,23 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
             iconSuffix: '_l',  // Here you pass the suffix you want
             weekScreens: {
               '1-2.hét': {
-                'screenBuilder': (context) => ModuleHipno('Azonosito'),
-                'isClickable': false,
+                'screenBuilder': (context) => ModuleHipno("$Azonosito"),
+                'isClickable': true,
               },
               '3-4.hét': {
-                'screenBuilder': (context) => ModuleHipno2('Azonosito'),
-                'isClickable': false,
+                'screenBuilder': (context) => ModuleHipno2("$Azonosito"),
+                'isClickable': true,
               },
               '5-6.hét': {
-                'screenBuilder': (context) => ModuleHipno3('Azonosito'),
-                'isClickable': false,
+                'screenBuilder': (context) => ModuleHipno3("$Azonosito"),
+                'isClickable': true,
               },
               '7-8.hét': {
-                'screenBuilder': (context) => ModuleHipno4('Azonosito'),
-                'isClickable': false,
+                'screenBuilder': (context) => ModuleHipno4("$Azonosito"),
+                'isClickable': true,
               },
               '9-12.hét': {
-                'screenBuilder': (context) => ModuleHipno5('Azonosito'),
+                'screenBuilder': (context) => ModuleHipno5("$Azonosito"),
                 'isClickable': true,
               },
 
@@ -412,7 +550,7 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
                                       // Use the minimum space required by the children
                                       children: [
                                         Text(
-                                          szam1, // Your button text
+                                          "szam1", // Your button text
                                           style:
                                           MyTextStyles.bluegomb(context),
                                         ),
@@ -532,7 +670,7 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
                                       // Use the minimum space required by the children
                                       children: [
                                         Text(
-                                          szam3, // Your button text
+                                          "szam3", // Your button text
                                           style:
                                           MyTextStyles.bluegomb(context),
                                         ),
@@ -556,7 +694,7 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
                               ),
                               child: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.9, // Adjust the width as needed
-                                child:  AudioPlayerPage(url: "http://baby.analogic.sztaki.hu/assets/nas/data/PUBLIC/anagy/Bethesda_mp3/A gondtalan tengerpart.mp3",azonosito: "$Azonosito",hangfajlszam: "mp3_1",onUzenetKuldes: szamokBbeallitas,),
+                                child:  AudioPlayerPage(url: "https://storage.googleapis.com/lomeeibucket/A%20gondtalan%20tengerpart.mp3",azonosito: "$Azonosito",hangfajlszam: "mp3_1",onUzenetKuldes: szamokBbeallitas,),
                                 // HtmlWidget(
                                 //     '<audio controls controlsList="nodownload" style="border:none; margin:0; padding:0; width:100%; height:100%;" src="http://baby.analogic.sztaki.hu/assets/nas/data/PUBLIC/anagy/Bethesda_vids/A gondtalan tengerpart.mp3" ></audio>',
                                 //     // '<iframe style="border:none; margin:0; padding:0; width:100%; height:100%;" src="http://baby.analogic.sztaki.hu/assets/nas/data/PUBLIC/anagy/Bethesda_vids/A szinek bolygoja.mp3" frameborder="0" allowfullscreen></iframe>',
@@ -593,7 +731,7 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
                                       // Use the minimum space required by the children
                                       children: [
                                         Text(
-                                          szam4, // Your button text
+                                          "szam4", // Your button text
                                           style:
                                           MyTextStyles.bluegomb(context),
                                         ),
@@ -617,7 +755,7 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
                               child: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.9, // Adjust the width as needed
 
-                                child:  AudioPlayerPage(url: "http://baby.analogic.sztaki.hu/assets/nas/data/PUBLIC/anagy/Bethesda_mp3/A csuszda.mp3",azonosito: "$Azonosito",hangfajlszam: "mp3_1",onUzenetKuldes: szamokBbeallitas,),
+                                child:  AudioPlayerPage(url: "https://storage.googleapis.com/lomeeibucket/A%20csuszda.mp3",azonosito: "$Azonosito",hangfajlszam: "mp3_1",onUzenetKuldes: szamokBbeallitas,),
 
                                 // child: HtmlWidget(
                                 //   '<audio controls controlsList="nodownload" style="border:none; margin:0; padding:0; width:100%; height:100%;" src="http://baby.analogic.sztaki.hu/assets/nas/data/PUBLIC/anagy/Bethesda_vids/A csuszda.mp3" ></audio>',
@@ -973,7 +1111,7 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
                               ),
                               child: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.9, // Adjust the width as needed
-                                child:  AudioPlayerPage(url: "http://baby.analogic.sztaki.hu/assets/nas/data/PUBLIC/anagy/Bethesda_mp3/A gondtalan tengerpart.mp3",azonosito: "$Azonosito",hangfajlszam: "mp3_1",onUzenetKuldes: szamokBbeallitas,),
+                                child:  AudioPlayerPage(url: "https://storage.googleapis.com/lomeeibucket/A%20gondtalan%20tengerpart.mp3",azonosito: "$Azonosito",hangfajlszam: "mp3_1",onUzenetKuldes: szamokBbeallitas,),
                                 // HtmlWidget(
                                 //     '<audio controls controlsList="nodownload" style="border:none; margin:0; padding:0; width:100%; height:100%;" src="http://baby.analogic.sztaki.hu/assets/nas/data/PUBLIC/anagy/Bethesda_vids/A gondtalan tengerpart.mp3" ></audio>',
                                 //     // '<iframe style="border:none; margin:0; padding:0; width:100%; height:100%;" src="http://baby.analogic.sztaki.hu/assets/nas/data/PUBLIC/anagy/Bethesda_vids/A szinek bolygoja.mp3" frameborder="0" allowfullscreen></iframe>',
@@ -1034,7 +1172,7 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
                               child: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.9, // Adjust the width as needed
 
-                                child:  AudioPlayerPage(url: "http://baby.analogic.sztaki.hu/assets/nas/data/PUBLIC/anagy/Bethesda_mp3/A csuszda.mp3",azonosito: "$Azonosito",hangfajlszam: "mp3_1",onUzenetKuldes: szamokBbeallitas,),
+                                child:  AudioPlayerPage(url: "https://storage.googleapis.com/lomeeibucket/A%20csuszda.mp3",azonosito: "$Azonosito",hangfajlszam: "mp3_1",onUzenetKuldes: szamokBbeallitas,),
 
                                 // child: HtmlWidget(
                                 //   '<audio controls controlsList="nodownload" style="border:none; margin:0; padding:0; width:100%; height:100%;" src="http://baby.analogic.sztaki.hu/assets/nas/data/PUBLIC/anagy/Bethesda_vids/A csuszda.mp3" ></audio>',
@@ -1072,7 +1210,7 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
                                       // Use the minimum space required by the children
                                       children: [
                                         Text(
-                                          szam10, // Your button text
+                                          "szam10", // Your button text
                                           style:
                                           MyTextStyles.bluegomb(context),
                                         ),
@@ -1271,7 +1409,7 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
                               ),
                               child: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.43, // Adjust the width as needed
-                                child:  AudioPlayerPage(url: "https://storage.googleapis.com/lomeeibucket/Progr_relax_nagyoknak.mp3",azonosito: "$Azonosito",hangfajlszam: "mp3_1"
+                                child:  AudioPlayerPage(url: "https://storage.googleapis.com/lomeeibucket/Progr_relax_nagyoknak.mp3",azonosito: "$Azonosito",hangfajlszam: "mp3_3"
                                   ,onUzenetKuldes: szamokBbeallitas,),
 
                                 // HtmlWidget(
@@ -1393,7 +1531,7 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
                               ),
                               child: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.43, // Adjust the width as needed
-                                child:  AudioPlayerPage(url: "http://baby.analogic.sztaki.hu/assets/nas/data/PUBLIC/anagy/Bethesda_mp3/A gondtalan tengerpart.mp3",azonosito: "$Azonosito",hangfajlszam: "mp3_1",onUzenetKuldes: szamokBbeallitas,),
+                                child:  AudioPlayerPage(url: "https://storage.googleapis.com/lomeeibucket/A%20gondtalan%20tengerpart.mp3",azonosito: "$Azonosito",hangfajlszam: "mp3_4",onUzenetKuldes: szamokBbeallitas,),
                                 // HtmlWidget(
                                 //     '<audio controls controlsList="nodownload" style="border:none; margin:0; padding:0; width:100%; height:100%;" src="http://baby.analogic.sztaki.hu/assets/nas/data/PUBLIC/anagy/Bethesda_vids/A gondtalan tengerpart.mp3" ></audio>',
                                 //     // '<iframe style="border:none; margin:0; padding:0; width:100%; height:100%;" src="http://baby.analogic.sztaki.hu/assets/nas/data/PUBLIC/anagy/Bethesda_vids/A szinek bolygoja.mp3" frameborder="0" allowfullscreen></iframe>',
@@ -1454,7 +1592,7 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
                               child: SizedBox(
                                 width: MediaQuery.of(context).size.width * 0.43, // Adjust the width as needed
 
-                                child:  AudioPlayerPage(url: "http://baby.analogic.sztaki.hu/assets/nas/data/PUBLIC/anagy/Bethesda_mp3/A csuszda.mp3",azonosito: "$Azonosito",hangfajlszam: "mp3_1",onUzenetKuldes: szamokBbeallitas,),
+                                child:  AudioPlayerPage(url: "https://storage.googleapis.com/lomeeibucket/A%20csuszda.mp3",azonosito: "$Azonosito",hangfajlszam: "mp3_5",onUzenetKuldes: szamokBbeallitas,),
 
                                 // child: HtmlWidget(
                                 //   '<audio controls controlsList="nodownload" style="border:none; margin:0; padding:0; width:100%; height:100%;" src="http://baby.analogic.sztaki.hu/assets/nas/data/PUBLIC/anagy/Bethesda_vids/A csuszda.mp3" ></audio>',
@@ -1520,23 +1658,23 @@ class _ModuleHipnotState extends State<ModuleHipnoWidget> {
 
                   weekScreens: {
                     '1-2.hét': {
-                      'screenBuilder': (context) => ModuleHipno('Azonosito'),
-                      'isClickable': false,
+                      'screenBuilder': (context) => ModuleHipno("$Azonosito"),
+                      'isClickable': true,
                     },
                     '3-4.hét': {
-                      'screenBuilder': (context) => ModuleHipno2('Azonosito'),
-                      'isClickable': false,
+                      'screenBuilder': (context) => ModuleHipno2("$Azonosito"),
+                      'isClickable': true,
                     },
                     '5-6.hét': {
-                      'screenBuilder': (context) => ModuleHipno3('Azonosito'),
-                      'isClickable': false,
+                      'screenBuilder': (context) => ModuleHipno3("$Azonosito"),
+                      'isClickable': true,
                     },
                     '7-8.hét': {
-                      'screenBuilder': (context) => ModuleHipno4('Azonosito'),
-                      'isClickable': false,
+                      'screenBuilder': (context) => ModuleHipno4("$Azonosito"),
+                      'isClickable': true,
                     },
                     '9-12.hét': {
-                      'screenBuilder': (context) => ModuleHipno5('Azonosito'),
+                      'screenBuilder': (context) => ModuleHipno5("$Azonosito"),
                       'isClickable': true,
                     },
 

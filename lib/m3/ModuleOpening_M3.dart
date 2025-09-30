@@ -36,11 +36,13 @@ import '../appbar/appbar.dart';
 
 // ignore: must_be_immutable
 class ModuleOpening_M3 extends StatelessWidget {
+  int _daysDifference = -1;
   String Azonosito = '';
   ModuleOpening_M3(String s, int daysDifference, {super.key}) {
     Azonosito = s;
     print("daysDifference");
     print(daysDifference);
+    _daysDifference = daysDifference;
   }
 
   @override
@@ -71,10 +73,10 @@ class ModuleOpening_M3 extends StatelessWidget {
             '/quiz6': (context) => QuizScreen6(),
             '/quiz7': (context) => QuizScreen7(),
 
-            '/module_opening': (context) => ModuleOpening_M3_Widget(Azonosito),
+            '/module_opening': (context) => ModuleOpening_M3_Widget(Azonosito,_daysDifference),
             // Adding the existing module screen as a route
           },
-          home: ModuleOpening_M3_Widget(Azonosito), // Default home screen
+          home: ModuleOpening_M3_Widget(Azonosito,_daysDifference), // Default home screen
         ),
       );
   }
@@ -82,28 +84,40 @@ class ModuleOpening_M3 extends StatelessWidget {
 
 class ModuleOpening_M3_Widget extends StatefulWidget {
   final String Azonosito;
+  int daysDifference;
 
-  ModuleOpening_M3_Widget(this.Azonosito, {Key? key}) : super(key: key);
+  ModuleOpening_M3_Widget(this.Azonosito, this.daysDifference, {Key? key}) : super(key: key);
 
   @override
   _ModuleOpening_M3_WidgetState createState() =>
-      _ModuleOpening_M3_WidgetState();
+      _ModuleOpening_M3_WidgetState(Azonosito,daysDifference);
 }
 
 class _ModuleOpening_M3_WidgetState extends State<ModuleOpening_M3_Widget> {
   late HomePageModel _model;
-  // late VideoPlayerController _controller;
-  // bool _isPlaying = false;
-  // late AnimationController _animationController;
-  // late double _currentPointOnFunction = 0; // Az aktuális függvényérték
-  // late double _sliderValue = 0.0; // A csúszka értéke
   late bool toggle = true;
   final ScrollController _scrollController = ScrollController();
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
   String Azonosito = '';
+  int DaysDifference = -1;
   Map<String, dynamic> decodedMap = {};
-  // List<Question> userResponse = [];
+
+  // Bool változók a hetek kattinthatóságához
+  bool isQuiz1Completed = true; // Kérdések (kezdeti kvíz)
+  bool isWeek1_2Unlocked = true; // 1-2. hét
+  bool isWeek3Unlocked = true; // 3. hét
+  bool isWeek4Unlocked = true; // 4. hét
+  bool isWeek5Unlocked = true; // 5. hét
+  bool isWeek6Unlocked = true; // 6. hét
+  bool isWeek7_8Unlocked = true; // 7-8. hét
+  bool isWeek9_11Unlocked = true; // 9-11. hét
+  bool isWeek12Unlocked = true;
+
+  _ModuleOpening_M3_WidgetState(String azonosito, int daysDifference){
+    Azonosito =  azonosito;
+    DaysDifference = daysDifference;
+  } // 12. hét
+
   Future getUserResponses(List<Question> questionList) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -111,30 +125,17 @@ class _ModuleOpening_M3_WidgetState extends State<ModuleOpening_M3_Widget> {
 
       if (jsonString != null) {
         decodedMap = json.decode(jsonString);
-        // setState(() {
-        //   answeerMap = decodedMap.map(
-        //     (key, value) => MapEntry(
-        //       key,
-        //       List<String>.from(value.map((item) => item as String)),
-        //     ),
-        //   );
-        // });
-        // filterAnsweerMap = filterMapByPrefixes(answeerMap, [
-        //   widget.keyValue.toString().split('-').first,
-        //   widget.keyValue.toString().split('-').last
-        // ]);
-
-        //  final quizProvider1 = Provider.of<QuizProvider1>(context);
-
-        // userResponse = questionList
-        //     .where((question) => answeerMap.keys
-        //         .contains(question.text.toString().split(':').first))
-        //     .toList();
-        setState(() {});
+        setState(() {
+          // Például: ha a decodedMap nem üres, az első kvíz kitöltöttnek tekinthető
+          isQuiz1Completed = decodedMap.isNotEmpty;
+          // További logika a hetek feloldásához, pl. ha egy adott kvíz kitöltve van
+          isWeek1_2Unlocked = isQuiz1Completed; // 1-2. hét feloldása az első kvíz után
+          isWeek3Unlocked = isWeek1_2Unlocked; // Példa: 3. hét az 1-2. után
+          // További feltételeket itt adhatsz meg
+        });
       }
-      // print(' -=-=-=-=-=-$userResponse');
     } catch (e) {
-      print('sdasdadas $e');
+      print('Hiba a válaszok betöltésekor: $e');
     }
   }
 
@@ -143,28 +144,37 @@ class _ModuleOpening_M3_WidgetState extends State<ModuleOpening_M3_Widget> {
     super.initState();
     _model = HomePageModel();
 
-    /*_controller =
-        _controller = VideoPlayerController.asset('assets/videos/szia.mp4')
-          ..initialize().then((_) {
-            setState(() {});
-          });
-    _isPlaying = true;
+    isWeek1_2Unlocked = true;
 
-    _controller.addListener(() {
-      setState(() {});
-    });
+    if (2<(DaysDifference/7)) {
+      isWeek3Unlocked = true;
+    }
+    if (3<(DaysDifference/7)) {
+      isWeek4Unlocked = true;
+    }
+    if (4<(DaysDifference/7)) {
+      isWeek5Unlocked = true;
+    }
+    if (5<(DaysDifference/7)) {
+      isWeek6Unlocked = true;
+    }
+    if (6<(DaysDifference/7)) {
+      isWeek7_8Unlocked = true;
+    }
+    if (8<(DaysDifference/7)) {
+      isWeek9_11Unlocked = true;
+    }
+    if (8<(DaysDifference/7)) {
+      isWeek1_2Unlocked = true;
+    }
 
-    _controller.value.isPlaying ? _controller.pause() : _controller.play();
-
-     */
   }
 
   @override
   void dispose() {
     _model.dispose();
-    // _controller.dispose();
-    super.dispose();
     _scrollController.dispose();
+    super.dispose();
   }
 
   void _scrollToTop() {
@@ -175,18 +185,6 @@ class _ModuleOpening_M3_WidgetState extends State<ModuleOpening_M3_Widget> {
     );
   }
 
-  // void _playPauseVideo() {
-  //   setState(() {
-  //     if (_controller.value.isPlaying) {
-  //       // _controller.pause();
-  //       _isPlaying = false;
-  //     } else {
-  //       // _controller.play();
-  //       _isPlaying = true;
-  //     }
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     final quizProvider1 = Provider.of<QuizProvider1>(context);
@@ -195,975 +193,542 @@ class _ModuleOpening_M3_WidgetState extends State<ModuleOpening_M3_Widget> {
       body: SingleChildScrollView(
         child: Column(children: [
           FutureBuilder(
-              future: getUserResponses(quizProvider1.questions),
-              builder: (context, sano) {
-                return Container(
-                  // height: MediaQuery.sizeOf(context).height,
-                  // width: MediaQuery.sizeOf(context).width,
-                  color: Colors.transparent,
-                  child: Row(
-                    children: [
-                      Container(
-                        height: MediaQuery.sizeOf(context).height*1.5,
-                        width: MediaQuery.sizeOf(context).width * 0.25,
-                        color: AppColors.whitewhite,
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 35,
-                            ),
-                            Row(
+            future: getUserResponses(quizProvider1.questions),
+            builder: (context, snapshot) {
+              return Container(
+                color: Colors.transparent,
+                child: Row(
+                  children: [
+                    Container(
+                      height: MediaQuery.sizeOf(context).height * 1.5,
+                      width: MediaQuery.sizeOf(context).width * 0.25,
+                      color: AppColors.whitewhite,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 35),
+                          Row(
+                            children: [
+                              Container(
+                                height: 25,
+                                width: 33,
+                                color: AppColors.yellow,
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                'Fájdalomkezelési kisokos',
+                                textAlign: TextAlign.left,
+                                style: MyTextStyles.huszonkettobekezdes(context),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 33),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  height: 25,
-                                  width: 33,
-                                  color: AppColors.yellow,
+                                  color: isQuiz1Completed
+                                      ? Colors.white
+                                      : AppColors.lightshade,
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.width * 0.03,
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.whitewhite,
+                                      borderRadius: BorderRadius.only(
+                                        bottomRight: Radius.circular(20.0),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                                const SizedBox(
-                                  width: 10,
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: isQuiz1Completed
+                                        ? Colors.white
+                                        : AppColors.lightshade,
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(20.0),
+                                      bottomLeft: Radius.circular(20.0),
+                                    ),
+                                  ),
+                                  child: ListTile(
+                                    leading: Image.asset('assets/images/2icon_m.png'),
+                                    title: Text(
+                                      'Kérdések',
+                                      style: MyTextStyles.vastagyellow(context),
+                                    ),
+                                    onTap: () {
+                                      if (!isQuiz1Completed) {
+                                        Navigator.pushNamed(context, '/quiz1');
+                                      } else {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(
+                                            content: Text('Ez a kvíz már kitöltve!'),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                                Container(
+                                  color: isQuiz1Completed
+                                      ? Colors.white
+                                      : AppColors.lightshade,
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.width * 0.02,
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.whitewhite,
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(20.0),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                                 Text(
-                                  'Fájdalomkezelési kisokos',
+                                  'Anyagok',
                                   textAlign: TextAlign.left,
-                                  style:
-                                  MyTextStyles.huszonkettobekezdes(context),
+                                  style: MyTextStyles.huszonegybekezdes(context),
+                                ),
+                                Container(
+                                  color: isWeek1_2Unlocked
+                                      ? Colors.white
+                                      : AppColors.lightshade,
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.width * 0.02,
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.whitewhite,
+                                      borderRadius: BorderRadius.only(
+                                        bottomRight: Radius.circular(20.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: isWeek1_2Unlocked
+                                        ? Colors.white
+                                        : AppColors.lightshade,
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(20.0),
+                                      bottomLeft: Radius.circular(20.0),
+                                    ),
+                                  ),
+                                  child: ListTile(
+                                    leading: Image.asset('assets/images/5icon_m.png'),
+                                    title: Text(
+                                      '1-2. hét',
+                                      style: MyTextStyles.vastagbekezdes(context),
+                                    ),
+                                    subtitle: Text(
+                                      isWeek1_2Unlocked ? 'Elérhető' : 'Zárolva',
+                                      style: MyTextStyles.kicsibekezdes(context),
+                                    ),
+                                    onTap: () {
+                                      if (isWeek1_2Unlocked) {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => const ShowResponse(''),
+                                          ),
+                                        );
+                                      } else {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(
+                                            content: Text('Kérlek, töltsd ki először a kvízt!'),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                                Container(
+                                  color: AppColors.whitewhite,
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.width * 0.02,
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.whitewhite,
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(20.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                ListTile(
+                                  leading: Image.asset('assets/images/4icon_m.png'),
+                                  title: Text(
+                                    '3. hét',
+                                    style: MyTextStyles.vastagbekezdes(context),
+                                  ),
+                                  subtitle: Text(
+                                    isWeek3Unlocked ? 'Elérhető' : 'Zárolva',
+                                    style: MyTextStyles.kicsibekezdes(context),
+                                  ),
+                                  onTap: () {
+                                    if (isWeek3Unlocked) {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const QuizScreen2(),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Ez a hét még zárolva van!'),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                                Container(
+                                  color: AppColors.whitewhite,
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.width * 0.02,
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.whitewhite,
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(20.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                ListTile(
+                                  leading: Image.asset('assets/images/6icon_m.png'),
+                                  title: Text(
+                                    '4. hét',
+                                    style: MyTextStyles.vastagbekezdes(context),
+                                  ),
+                                  subtitle: Text(
+                                    isWeek4Unlocked ? 'Elérhető' : 'Zárolva',
+                                    style: MyTextStyles.kicsibekezdes(context),
+                                  ),
+                                  onTap: () {
+                                    if (isWeek4Unlocked) {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const QuizScreen3(),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Ez a hét még zárolva van!'),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                                Container(
+                                  color: AppColors.whitewhite,
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.width * 0.02,
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.whitewhite,
+                                      borderRadius: BorderRadius.only(
+                                        bottomRight: Radius.circular(20.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                ListTile(
+                                  leading: Image.asset('assets/images/3icon_m.png'),
+                                  title: Text(
+                                    '5. hét',
+                                    style: MyTextStyles.vastagbekezdes(context),
+                                  ),
+                                  subtitle: Text(
+                                    isWeek5Unlocked ? 'Elérhető' : 'Zárolva',
+                                    style: MyTextStyles.kicsibekezdes(context),
+                                  ),
+                                  onTap: () {
+                                    if (isWeek5Unlocked) {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const QuizScreen4(),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Ez a hét még zárolva van!'),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                                Container(
+                                  color: AppColors.whitewhite,
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.width * 0.02,
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.whitewhite,
+                                      borderRadius: BorderRadius.only(
+                                        bottomRight: Radius.circular(20.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                ListTile(
+                                  leading: Image.asset('assets/images/7icon_m.png'),
+                                  title: Text(
+                                    '6. hét',
+                                    style: MyTextStyles.vastagbekezdes(context),
+                                  ),
+                                  subtitle: Text(
+                                    isWeek6Unlocked ? 'Elérhető' : 'Zárolva',
+                                    style: MyTextStyles.kicsibekezdes(context),
+                                  ),
+                                  onTap: () {
+                                    if (isWeek6Unlocked) {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const QuizScreen5(),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Ez a hét még zárolva van!'),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                                Container(
+                                  color: AppColors.whitewhite,
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.width * 0.02,
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.whitewhite,
+                                      borderRadius: BorderRadius.only(
+                                        bottomRight: Radius.circular(20.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                ListTile(
+                                  leading: Image.asset('assets/images/7icon_m.png'),
+                                  title: Text(
+                                    '7-8. hét',
+                                    style: MyTextStyles.vastagbekezdes(context),
+                                  ),
+                                  subtitle: Text(
+                                    isWeek7_8Unlocked ? 'Elérhető' : 'Zárolva',
+                                    style: MyTextStyles.kicsibekezdes(context),
+                                  ),
+                                  onTap: () {
+                                    if (isWeek7_8Unlocked) {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const QuizScreen6(),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Ez a hét még zárolva van!'),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                                Container(
+                                  color: AppColors.whitewhite,
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.width * 0.02,
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.whitewhite,
+                                      borderRadius: BorderRadius.only(
+                                        bottomRight: Radius.circular(20.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                ListTile(
+                                  leading: Image.asset('assets/images/7icon_m.png'),
+                                  title: Text(
+                                    '9-11. hét',
+                                    style: MyTextStyles.vastagbekezdes(context),
+                                  ),
+                                  subtitle: Text(
+                                    isWeek9_11Unlocked ? 'Elérhető' : 'Zárolva',
+                                    style: MyTextStyles.kicsibekezdes(context),
+                                  ),
+                                  onTap: () {
+                                    if (isWeek9_11Unlocked) {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const QuizScreen7(),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Ez a hét még zárolva van!'),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                                Container(
+                                  color: AppColors.whitewhite,
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.width * 0.02,
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.whitewhite,
+                                      borderRadius: BorderRadius.only(
+                                        bottomRight: Radius.circular(20.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                ListTile(
+                                  leading: Image.asset('assets/images/7icon_m.png'),
+                                  title: Text(
+                                    '12. hét',
+                                    style: MyTextStyles.vastagbekezdes(context),
+                                  ),
+                                  subtitle: Text(
+                                    isWeek12Unlocked ? 'Elérhető' : 'Zárolva',
+                                    style: MyTextStyles.kicsibekezdes(context),
+                                  ),
+                                  onTap: () {
+                                    if (isWeek12Unlocked) {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const M3_12het(),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Ez a hét még zárolva van!'),
+                                        ),
+                                      );
+                                    }
+                                  },
                                 ),
                               ],
                             ),
-
-                            Padding(
-                              padding: const EdgeInsets.only(left: 33),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    color: decodedMap.isNotEmpty
-                                        ? Colors.white
-                                        : AppColors.lightshade,
-                                    child: Container(
-                                      height:
-                                      MediaQuery.of(context).size.width *
-                                          0.03,
-                                      decoration: const BoxDecoration(
-                                        color: AppColors.whitewhite,
-                                        borderRadius: BorderRadius.only(
-                                          bottomRight: Radius.circular(20.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: decodedMap.isNotEmpty
-                                          ? Colors.white
-                                          : AppColors.lightshade,
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(20.0),
-                                        bottomLeft: Radius.circular(20.0),
-                                        // topRight:  Radius.circular(20.0),
-                                        // bottomRight:  Radius.circular(20.0)
-                                      ),
-                                    ),
-                                    child: ListTile(
-                                      leading: Image.asset(
-                                          'assets/images/2icon_m.png'),
-                                      title: Text(
-                                        'Kérdések',
-                                        style:
-                                        MyTextStyles.vastagyellow(context),
-                                      ),
-                                      onTap: () async {
-                                        if (decodedMap.isEmpty) {
-                                          Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  ModuleOpening_M3('Azonosito',0),
-                                            ),
-                                          );
-                                        }
-
-                                        print("gomb");
-                                      },
-                                    ),
-                                  ),
-                                  Container(
-                                    color: decodedMap.isNotEmpty
-                                        ? Colors.white
-                                        : AppColors.lightshade,
-                                    child: Container(
-                                      height:
-                                      MediaQuery.of(context).size.width *
-                                          0.02,
-                                      decoration: const BoxDecoration(
-                                        color: AppColors.whitewhite,
-                                        borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(20.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-
-                                  Text(
-                                    'Anyagok',
-                                    textAlign: TextAlign.left,
-                                    style:
-                                    MyTextStyles.huszonegybekezdes(context),
-                                  ),
-
-                                  Container(
-                                    color: decodedMap.isEmpty
-                                        ? Colors.white
-                                        : AppColors.lightshade,
-                                    child: Container(
-                                      height:
-                                      MediaQuery.of(context).size.width *
-                                          0.02,
-                                      decoration: const BoxDecoration(
-                                        color: AppColors.whitewhite,
-                                        borderRadius: BorderRadius.only(
-                                          bottomRight: Radius.circular(20.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: decodedMap.isEmpty
-                                          ? Colors.white
-                                          : AppColors.lightshade,
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(20.0),
-                                        bottomLeft: Radius.circular(20.0),
-                                      ),
-                                    ),
-                                    child: ListTile(
-                                      leading: Image.asset(
-                                          'assets/images/5icon_m.png'),
-                                      title: Text(
-                                        '1-2. hét',
-                                        style: MyTextStyles.vastagbekezdes(
-                                            context),
-                                      ),
-                                      subtitle: Text(
-                                        'Jelenlegi',
-                                        style:
-                                        MyTextStyles.kicsibekezdes(context),
-                                      ),
-                                      onTap: () {
-                                        if (decodedMap.isEmpty) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                            content: Text('Kérlek, töltsd ki először a kvízt!'),
-                                          ));
-                                        }
-
-                                        // Navigator.pushReplacement(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //     builder: (BuildContext context) =>
-                                        //         const ShowResponse(''),
-                                        //   ),
-                                        // );
-                                      },
-                                    ),
-                                  ),
-                                  // Container(
-                                  //   color: decodedMap.isEmpty
-                                  //       ? Colors.white
-                                  //       : AppColors.lightshade,
-                                  //   child: Container(
-                                  //     height:
-                                  //         MediaQuery.of(context).size.width *
-                                  //             0.02,
-                                  //     decoration: const BoxDecoration(
-                                  //       color: AppColors.whitewhite,
-                                  //       borderRadius: BorderRadius.only(
-                                  //         topRight: Radius.circular(20.0),
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  Container(
-                                    color: AppColors.whitewhite,
-                                    child: Container(
-                                      height:
-                                      MediaQuery.of(context).size.width * 0.02,
-                                      decoration:const BoxDecoration(
-                                        color: AppColors.whitewhite,
-                                        borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(20.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  ListTile(
-                                    leading: Image.asset('assets/images/4icon_m.png'),
-                                    title: Text(
-                                      '3. hét',
-                                      style: MyTextStyles.vastagbekezdes(context),
-                                    ),
-                                    subtitle: Text(
-                                      'Zárolva',
-                                      style: MyTextStyles.kicsibekezdes(context),
-                                    ),
-                                    onTap: () {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                          const  QuizScreen2(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  Container(
-                                    color: AppColors.whitewhite,
-                                    child: Container(
-                                      height:
-                                      MediaQuery.of(context).size.width * 0.02,
-                                      decoration:const  BoxDecoration(
-                                        color: AppColors.whitewhite,
-                                        borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(20.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  ListTile(
-                                    leading: Image.asset('assets/images/6icon_m.png'),
-                                    title: Text(
-                                      '4. hét',
-                                      style: MyTextStyles.vastagbekezdes(context),
-                                    ),
-                                    subtitle: Text(
-                                      'Zárolva',
-                                      style: MyTextStyles.kicsibekezdes(context),
-                                    ),
-                                    onTap: () {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                          const  QuizScreen3(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  Container(
-                                    color: AppColors.whitewhite,
-                                    child: Container(
-                                      height:
-                                      MediaQuery.of(context).size.width * 0.02,
-                                      decoration:const  BoxDecoration(
-                                        color: AppColors.whitewhite,
-                                        borderRadius: BorderRadius.only(
-                                          bottomRight: Radius.circular(20.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  ListTile(
-                                    leading: Image.asset('assets/images/3icon_m.png'),
-                                    title: Text(
-                                      '5. hét',
-                                      style: MyTextStyles.vastagbekezdes(context),
-                                    ),
-                                    subtitle: Text(
-                                      'Zárolva',
-                                      style: MyTextStyles.kicsibekezdes(context),
-                                    ),
-                                    onTap: () {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                          const  QuizScreen4(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  Container(
-                                    color: AppColors.whitewhite,
-                                    child: Container(
-                                      height:
-                                      MediaQuery.of(context).size.width * 0.02,
-                                      decoration:const  BoxDecoration(
-                                        color: AppColors.whitewhite,
-                                        borderRadius: BorderRadius.only(
-                                          bottomRight: Radius.circular(20.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  ListTile(
-                                    leading: Image.asset('assets/images/7icon_m.png'),
-                                    title: Text(
-                                      '6. hét',
-                                      style: MyTextStyles.vastagbekezdes(context),
-                                    ),
-                                    subtitle: Text(
-                                      'Zárolva',
-                                      style: MyTextStyles.kicsibekezdes(context),
-                                    ),
-                                    onTap: () {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                          const  QuizScreen5(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  Container(
-                                    color: AppColors.whitewhite,
-                                    child: Container(
-                                      height:
-                                      MediaQuery.of(context).size.width * 0.02,
-                                      decoration:const  BoxDecoration(
-                                        color: AppColors.whitewhite,
-                                        borderRadius: BorderRadius.only(
-                                          bottomRight: Radius.circular(20.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  ListTile(
-                                    leading: Image.asset('assets/images/7icon_m.png'),
-                                    title: Text(
-                                      '7-8. hét',
-                                      style: MyTextStyles.vastagbekezdes(context),
-                                    ),
-                                    subtitle: Text(
-                                      'Zárolva',
-                                      style: MyTextStyles.kicsibekezdes(context),
-                                    ),
-                                    onTap: () {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                          const  QuizScreen6(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  Container(
-                                    color: AppColors.whitewhite,
-                                    child: Container(
-                                      height:
-                                      MediaQuery.of(context).size.width * 0.02,
-                                      decoration:const  BoxDecoration(
-                                        color: AppColors.whitewhite,
-                                        borderRadius: BorderRadius.only(
-                                          bottomRight: Radius.circular(20.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  ListTile(
-                                    leading: Image.asset('assets/images/7icon_m.png'),
-                                    title: Text(
-                                      '9-11. hét',
-                                      style: MyTextStyles.vastagbekezdes(context),
-                                    ),
-                                    subtitle: Text(
-                                      'Zárolva',
-                                      style: MyTextStyles.kicsibekezdes(context),
-                                    ),
-                                    onTap: () {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                          const  QuizScreen7(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  Container(
-                                    color: AppColors.whitewhite,
-                                    child: Container(
-                                      height:
-                                      MediaQuery.of(context).size.width * 0.02,
-                                      decoration:const  BoxDecoration(
-                                        color: AppColors.whitewhite,
-                                        borderRadius: BorderRadius.only(
-                                          bottomRight: Radius.circular(20.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  ListTile(
-                                    leading: Image.asset('assets/images/7icon_m.png'),
-                                    title: Text(
-                                      '12. hét',
-                                      style: MyTextStyles.vastagbekezdes(context),
-                                    ),
-                                    subtitle: Text(
-                                      'Zárolva',
-                                      style: MyTextStyles.kicsibekezdes(context),
-                                    ),
-                                    onTap: () {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                          const  M3_12het(),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        width: MediaQuery.sizeOf(context).width * 0.75,
-                        child: decodedMap.isNotEmpty
-                            ? const ShowResponse('')
-                            : Stack(
-                          children: [
-                            Container(
-                              height: MediaQuery.sizeOf(context).height*1.5,
-                              width:
-                              MediaQuery.sizeOf(context).width * 0.75,
-                              decoration: const BoxDecoration(
-                                color: AppColors.lightshade,
-                              ),
-                              child: Align(
-                                alignment: Alignment.topCenter, // Align the Column to the top center
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                    left: MediaQuery.of(context).size.width * 0.03,
-                                    right: MediaQuery.of(context).size.width * 0.3,
-                                    top: MediaQuery.of(context).size.width * 0.07,
-
-                                  ), // Indentation for the rows
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min, // Minimize Column height to its content
-                                    crossAxisAlignment: CrossAxisAlignment.start, // Align children to the start of the column
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              "Szia!",
-                                              style: MyTextStyles.huszonkettovastagyellow(context),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: MediaQuery.of(context).size.width * 0.02,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              "Ezen a honlapon találsz majd néhány kérdést és videót amivel személyre tudjuk szabni a kezelésedet. Kérünk, válaszolj majd ezekre figyelemmel. \nA kitöltés körülbelül x percet vesz igénybe. Lehetőleg ne zárd be az ablakot amíg nem végeztél a kitöltéssel.",
-                                              style: MyTextStyles.bekezdes(context),
-                                              textAlign: TextAlign.justify,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: MediaQuery.of(context).size.height * 0.02,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              "\nReméljük élvezni fogod ezeket a gyakorlatokat és jól szórakozol majd!",
-                                              style: MyTextStyles.bekezdes(context),
-                                              textAlign: TextAlign.justify,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: MediaQuery.of(context).size.width * 0.07,
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          print('Button pressed ...');
-                                          Navigator.pushNamed(context, '/quiz1');
-                                        },
-                                        style: ButtonStyle(
-                                          backgroundColor: MaterialStateProperty.all<Color>(
-                                            AppColors.whitewhite,
-                                          ),
-                                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                            RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(10),
-                                            ),
-                                          ),
-                                          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                                            EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.sizeOf(context).width * 0.75,
+                      child: decodedMap.isNotEmpty
+                          ? const ShowResponse('')
+                          : Stack(
+                        children: [
+                          Container(
+                            height: MediaQuery.sizeOf(context).height * 1.5,
+                            width: MediaQuery.sizeOf(context).width * 0.75,
+                            decoration: const BoxDecoration(
+                              color: AppColors.lightshade,
+                            ),
+                            child: Align(
+                              alignment: Alignment.topCenter,
+                              child: Container(
+                                padding: EdgeInsets.only(
+                                  left: MediaQuery.of(context).size.width * 0.03,
+                                  right: MediaQuery.of(context).size.width * 0.3,
+                                  top: MediaQuery.of(context).size.width * 0.07,
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            "Szia!",
+                                            style: MyTextStyles.huszonkettovastagyellow(context),
                                           ),
                                         ),
-                                        child: Text(
-                                          "Kezdjük!",
-                                          style: MyTextStyles.huszonkettovastagyellow(context),
+                                      ],
+                                    ),
+                                    SizedBox(height: MediaQuery.of(context).size.width * 0.02),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            "Ezen a honlapon találsz majd néhány kérdést és videót amivel személyre tudjuk szabni a kezelésedet. Kérünk, válaszolj majd ezekre figyelemmel. \nA kitöltés körülbelül 20-25 percet vesz igénybe. Lehetőleg ne zárd be az ablakot amíg nem végeztél a kitöltéssel.",
+                                            style: MyTextStyles.bekezdes(context),
+                                            textAlign: TextAlign.justify,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            "\nReméljük élvezni fogod ezeket a gyakorlatokat és jól szórakozol majd!",
+                                            style: MyTextStyles.bekezdes(context),
+                                            textAlign: TextAlign.justify,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: MediaQuery.of(context).size.width * 0.07),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        print('Button pressed ...');
+                                        Navigator.pushNamed(context, '/quiz1');
+                                      },
+                                      style: ButtonStyle(
+                                        backgroundColor: MaterialStateProperty.all<Color>(
+                                          AppColors.whitewhite,
+                                        ),
+                                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                          EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: MediaQuery.of(context).size.width * 0.002,
+                                      child: Text(
+                                        "Kezdjük!",
+                                        style: MyTextStyles.huszonkettovastagyellow(context),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    SizedBox(height: MediaQuery.of(context).size.width * 0.002),
+                                  ],
                                 ),
                               ),
                             ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: Opacity(
-                                opacity:
-                                0.6, // Adjust the opacity as needed
-                                child: SizedBox(
-                                  width:
-                                  MediaQuery.of(context).size.width *
-                                      0.4, // Set your desired width
-                                  height:
-                                  MediaQuery.of(context).size.height *
-                                      1.5,
-                                  child: SvgPicture.asset(
-                                    "assets/images/m3hatter.svg",
-                                    fit: BoxFit.fill,
-                                  ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Opacity(
+                              opacity: 0.6,
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                height: MediaQuery.of(context).size.height * 1.5,
+                                child: SvgPicture.asset(
+                                  "assets/images/m3hatter.svg",
+                                  fit: BoxFit.fill,
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-
-                      // Stack(
-                      //   children: [
-                      //     // Background Layer
-                      //     Container(
-                      //       color: AppColors.lightshade, // Your desired background color
-                      //       width: double.infinity,
-                      //       height: MediaQuery.of(context).size.height*1.2,
-                      //     ),
-                      //     // Image Layer
-                      //     Align(
-                      //       alignment: Alignment.centerRight,
-                      //       child: Opacity(
-                      //         opacity: 0.6, // Adjust the opacity as needed
-                      //         child: SizedBox(
-                      //           width: MediaQuery.of(context).size.width * 0.4, // Set your desired width
-                      //           height: MediaQuery.of(context).size.height*1.2,
-                      //           child: SvgPicture.asset(
-                      //             "assets/images/m3hatter.svg",
-                      //             fit: BoxFit.fill,
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-
-                      //     // Overlay content
-                      //     Column(
-                      //       children: [
-                      //         Container(
-                      //           padding: EdgeInsets.only(
-                      //             left: MediaQuery.of(context).size.width * 0.27,
-                      //             right: MediaQuery.of(context).size.width * 0.3,
-                      //           ), // Indentation for the rows
-                      //           child: Column(
-                      //             children: [
-                      //               SizedBox(height: MediaQuery.of(context).size.width * 0.06),
-                      //               Row(
-                      //                 children: [
-                      //                   Expanded(
-                      //                     child: Text(
-                      //                       "Szia!",
-                      //                       style: MyTextStyles.bethesdagomb(context),
-                      //                     ),
-                      //                   ),
-                      //                 ],
-                      //               ),
-                      //               SizedBox(height: MediaQuery.of(context).size.width * 0.02),
-                      //               Row(
-                      //                 children: [
-                      //                   Expanded(
-                      //                     child: Text(
-                      //                       "Ezen a honlapon találsz majd néhány kérdést és videót amivel személyre tudjuk szabni a kezelésedet. Kérünk, válaszolj majd ezekre figyelemmel. \nA kitöltés körülbelül x percet vesz igénybe. Lehetőleg ne zárd be az ablakot amíg nem végeztél a kitöltéssel.",
-                      //                       style: MyTextStyles.bekezdes(context),
-                      //                       textAlign: TextAlign.justify,
-                      //                     ),
-                      //                   ),
-                      //                 ],
-                      //               ),
-                      //               SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                      //               Row(
-                      //                 children: [
-                      //                   Expanded(
-                      //                     child: Text(
-                      //                       "\nReméljük élvezni fogod ezeket a gyakorlatokat és jól szórakozol majd!",
-                      //                       style: MyTextStyles.bekezdes(context),
-                      //                       textAlign: TextAlign.justify,
-                      //                     ),
-                      //                   ),
-                      //                 ],
-                      //               ),
-                      //                 SizedBox(height: MediaQuery.of(context).size.width * 0.07),
-
-                      //               ElevatedButton(
-                      //                 onPressed: () {
-                      //                   print('Button pressed ...');
-                      //                   Navigator.pushNamed(context, '/quiz1');
-                      //                 },
-                      //                 style: ButtonStyle(
-                      //                   backgroundColor:
-                      //                   MaterialStateProperty.all<Color>(
-                      //                     AppColors.whitewhite,
-                      //                   ),
-                      //                   shape: MaterialStateProperty.all<
-                      //                       RoundedRectangleBorder>(
-                      //                     RoundedRectangleBorder(
-                      //                       borderRadius: BorderRadius.circular(10),
-                      //                     ),
-                      //                   ),
-                      //                   padding: MaterialStateProperty.all<
-                      //                       EdgeInsetsGeometry>(
-                      //                     EdgeInsets.symmetric(
-                      //                         vertical: 12, horizontal: 24),
-                      //                   ),
-                      //                 ),
-                      //                 child: Text(
-                      //                   "Kezdjük!",
-                      //                   style: MyTextStyles.bethesdagomb(context),
-                      //                 ),
-                      //               ),
-                      //               SizedBox(height: MediaQuery.of(context).size.width * 0.02),
-                      //               // Container(
-                      //               //   width: MediaQuery.of(context).size.width * 0.45,
-                      //               //   height: MediaQuery.of(context).size.width * 0.2,
-                      //               //   decoration: BoxDecoration(
-                      //               //     border: Border.all(color: Colors.black, width: 1),
-                      //               //   ),
-                      //               //   child: Stack(
-                      //               //     children: [
-                      //               //       SvgPicture.asset(
-                      //               //         "assets/images/m3hatter.svg",
-                      //               //         fit: BoxFit.cover,
-                      //               //       ),
-                      //               //       Positioned(
-                      //               //         bottom: 16, // Adjust the position as needed
-                      //               //         left: 16, // Adjust the position as needed
-                      //               //         child: ElevatedButton(
-                      //               //           onPressed: () {
-                      //               //             // Handle button press
-                      //               //           },
-                      //               //           child: Text('Click Me'),
-                      //               //         ),
-                      //               //       ),
-                      //               //     ],
-                      //               //   ),
-                      //               // ),
-                      //               // Add more rows as needed
-                      //             ],
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     ),
-
-                      //   Positioned(
-                      //       top: 0,
-                      //       left: 0,
-                      //       bottom: 0,
-                      //       child: Container(
-                      //         width: MediaQuery.of(context).size.width * 0.25,
-                      //         color: Colors.white.withOpacity(1),
-                      //         child: Padding(
-                      //           padding: EdgeInsets.only(
-                      //             top: MediaQuery.of(context).size.width * 0.03,
-                      //             left: MediaQuery.of(context).size.width * 0.04,
-                      //           ),
-                      //           child: Container(
-                      //             width: MediaQuery.of(context).size.width * 0.3,
-                      //             color: Colors.white.withOpacity(0.3),
-                      //             child: Column(
-                      //               crossAxisAlignment: CrossAxisAlignment.start,
-                      //               children: [
-                      //                 Text(
-                      //                   'Fájdalomkezelési kisokos',
-                      //                   textAlign: TextAlign.left,
-                      //                   style: MyTextStyles.huszonkettobekezdes(context),
-                      //                 ),
-                      //                 Container(
-                      //                   color: AppColors.lightshade,
-                      //                   child: Container(
-                      //                     height:
-                      //                         MediaQuery.of(context).size.width * 0.03,
-                      //                     decoration: BoxDecoration(
-                      //                       color: AppColors.whitewhite,
-                      //                       borderRadius: BorderRadius.only(
-                      //                         bottomRight: Radius.circular(20.0),
-                      //                       ),
-                      //                     ),
-                      //                   ),
-                      //                 ),
-                      //                 Container(
-                      //                   decoration: const BoxDecoration(
-                      //                     color: AppColors.lightshade,
-                      //                     borderRadius: BorderRadius.only(
-                      //                       topLeft: Radius.circular(20.0),
-                      //                       bottomLeft: Radius.circular(20.0),
-                      //                     ),
-                      //                   ),
-                      //                   child: ListTile(
-                      //                     leading:
-                      //                         Image.asset('assets/images/2icon_m.png'),
-                      //                     title: Text(
-                      //                       'Kérdések',
-                      //                       style: MyTextStyles.vastagyellow(context),
-                      //                     ),
-                      //                     onTap: () async {
-                      //                       Navigator.pushReplacement(
-                      //                         context,
-                      //                         MaterialPageRoute(
-                      //                           builder: (BuildContext context) =>
-                      //                               ModuleOpening_M3('Azonosito'),
-                      //                         ),
-                      //                       );
-                      //                       print("gomb");
-                      //                     },
-                      //                   ),
-                      //                 ),
-                      //                 Container(
-                      //                   color: AppColors.lightshade,
-                      //                   child: Container(
-                      //                     height:
-                      //                         MediaQuery.of(context).size.width * 0.02,
-                      //                     decoration: BoxDecoration(
-                      //                       color: AppColors.whitewhite,
-                      //                       borderRadius: BorderRadius.only(
-                      //                         topRight: Radius.circular(20.0),
-                      //                       ),
-                      //                     ),
-                      //                   ),
-                      //                 ),
-                      //                 Text(
-                      //                   'Anyagok',
-                      //                   textAlign: TextAlign.left,
-                      //                   style: MyTextStyles.huszonegybekezdes(context),
-                      //                 ),
-                      //                 Container(
-                      //                   color: AppColors.whitewhite,
-                      //                   child: Container(
-                      //                     height:
-                      //                         MediaQuery.of(context).size.width * 0.02,
-                      //                     decoration: BoxDecoration(
-                      //                       color: AppColors.whitewhite,
-                      //                       borderRadius: BorderRadius.only(
-                      //                         topRight: Radius.circular(20.0),
-                      //                       ),
-                      //                     ),
-                      //                   ),
-                      //                 ),
-                      //                 Container(
-                      //                   decoration: const BoxDecoration(
-                      //                     color: AppColors.whitewhite,
-                      //                     borderRadius: BorderRadius.only(
-                      //                       topLeft: Radius.circular(20.0),
-                      //                       bottomLeft: Radius.circular(20.0),
-                      //                     ),
-                      //                   ),
-                      //                   child: ListTile(
-                      //                     leading:
-                      //                         Image.asset('assets/images/5icon_m.png'),
-                      //                     title: Text(
-                      //                       '1-2. hét',
-                      //                       style: MyTextStyles.vastagbekezdes(context),
-                      //                     ),
-                      //                     subtitle: Text(
-                      //                       'Zárolva',
-                      //                       style: MyTextStyles.kicsibekezdes(context),
-                      //                     ),
-                      //                     onTap: () {
-                      //                       Navigator.pushReplacement(
-                      //                         context,
-                      //                         MaterialPageRoute(
-                      //                           builder: (BuildContext context) =>
-                      //                              const  ShowResponse('1-2'),
-                      //                         ),
-                      //                       );
-                      //                     },
-                      //                   ),
-                      //                 ),
-                      //                 Container(
-                      //                   color: AppColors.whitewhite,
-                      //                   child: Container(
-                      //                     height:
-                      //                         MediaQuery.of(context).size.width * 0.02,
-                      //                     decoration:const BoxDecoration(
-                      //                       color: AppColors.whitewhite,
-                      //                       borderRadius: BorderRadius.only(
-                      //                         topRight: Radius.circular(20.0),
-                      //                       ),
-                      //                     ),
-                      //                   ),
-                      //                 ),
-                      //                 ListTile(
-                      //                   leading: Image.asset('assets/images/4icon_m.png'),
-                      //                   title: Text(
-                      //                     '3-4. hét',
-                      //                     style: MyTextStyles.vastagbekezdes(context),
-                      //                   ),
-                      //                   subtitle: Text(
-                      //                     'Zárolva',
-                      //                     style: MyTextStyles.kicsibekezdes(context),
-                      //                   ),
-                      //                   onTap: () {
-                      //                     Navigator.pushReplacement(
-                      //                       context,
-                      //                       MaterialPageRoute(
-                      //                         builder: (BuildContext context) =>
-                      //                             const  ShowResponse('3-4'),
-                      //                       ),
-                      //                     );
-                      //                   },
-                      //                 ),
-                      //                 Container(
-                      //                   color: AppColors.whitewhite,
-                      //                   child: Container(
-                      //                     height:
-                      //                         MediaQuery.of(context).size.width * 0.02,
-                      //                     decoration:const  BoxDecoration(
-                      //                       color: AppColors.whitewhite,
-                      //                       borderRadius: BorderRadius.only(
-                      //                         topRight: Radius.circular(20.0),
-                      //                       ),
-                      //                     ),
-                      //                   ),
-                      //                 ),
-                      //                 ListTile(
-                      //                   leading: Image.asset('assets/images/6icon_m.png'),
-                      //                   title: Text(
-                      //                     '5-6. hét',
-                      //                     style: MyTextStyles.vastagbekezdes(context),
-                      //                   ),
-                      //                   subtitle: Text(
-                      //                     'Zárolva',
-                      //                     style: MyTextStyles.kicsibekezdes(context),
-                      //                   ),
-                      //                   onTap: () {
-                      //                     Navigator.pushReplacement(
-                      //                       context,
-                      //                       MaterialPageRoute(
-                      //                         builder: (BuildContext context) =>
-                      //                            const  ShowResponse('5-6'),
-                      //                       ),
-                      //                     );
-                      //                   },
-                      //                 ),
-                      //                 Container(
-                      //                   color: AppColors.whitewhite,
-                      //                   child: Container(
-                      //                     height:
-                      //                         MediaQuery.of(context).size.width * 0.02,
-                      //                     decoration:const  BoxDecoration(
-                      //                       color: AppColors.whitewhite,
-                      //                       borderRadius: BorderRadius.only(
-                      //                         bottomRight: Radius.circular(20.0),
-                      //                       ),
-                      //                     ),
-                      //                   ),
-                      //                 ),
-                      //                 ListTile(
-                      //                   leading: Image.asset('assets/images/3icon_m.png'),
-                      //                   title: Text(
-                      //                     '7-8. hét',
-                      //                     style: MyTextStyles.vastagbekezdes(context),
-                      //                   ),
-                      //                   subtitle: Text(
-                      //                     'Zárolva',
-                      //                     style: MyTextStyles.kicsibekezdes(context),
-                      //                   ),
-                      //                   onTap: () {
-                      //                     Navigator.pushReplacement(
-                      //                       context,
-                      //                       MaterialPageRoute(
-                      //                         builder: (BuildContext context) =>
-                      //                            const  ShowResponse('7-8'),
-                      //                       ),
-                      //                     );
-                      //                   },
-                      //                 ),
-                      //                 Container(
-                      //                   color: AppColors.whitewhite,
-                      //                   child: Container(
-                      //                     height:
-                      //                         MediaQuery.of(context).size.width * 0.02,
-                      //                     decoration:const  BoxDecoration(
-                      //                       color: AppColors.whitewhite,
-                      //                       borderRadius: BorderRadius.only(
-                      //                         bottomRight: Radius.circular(20.0),
-                      //                       ),
-                      //                     ),
-                      //                   ),
-                      //                 ),
-                      //                 // ListTile(
-                      //                 //   leading: Image.asset('assets/images/7icon_m.png'),
-                      //                 //   title: Text(
-                      //                 //     '9-12. hét',
-                      //                 //     style: MyTextStyles.vastagbekezdes(context),
-                      //                 //   ),
-                      //                 //   subtitle: Text(
-                      //                 //     'Zárolva',
-                      //                 //     style: MyTextStyles.kicsibekezdes(context),
-                      //                 //   ),
-                      //                 //   onTap: () {
-                      //                 //     Navigator.pushReplacement(
-                      //                 //       context,
-                      //                 //       MaterialPageRoute(
-                      //                 //         builder: (BuildContext context) =>
-                      //                 //             ModuleOpening_M3('Azonosito'),
-                      //                 //       ),
-                      //                 //     );
-                      //                 //   },
-                      //                 // ),
-
-                      //                 Container(
-                      //                   color: AppColors.whitewhite,
-                      //                   child: Container(
-                      //                     height:
-                      //                         MediaQuery.of(context).size.width * 0.02,
-                      //                     decoration:const  BoxDecoration(
-                      //                       color: AppColors.whitewhite,
-                      //                       borderRadius: BorderRadius.only(
-                      //                         bottomRight: Radius.circular(20.0),
-                      //                       ),
-                      //                     ),
-                      //                   ),
-                      //                 ),
-                      //               ],
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     Positioned(
-                      //       top: MediaQuery.of(context).size.width * 0.029,
-                      //       left: 0,
-                      //       child: Container(
-                      //         width: MediaQuery.of(context).size.width * 0.03,
-                      //         height: MediaQuery.of(context).size.height * 0.05,
-                      //         color: AppColors.yellow,
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
-                    ],
-                  ),
-                );
-              }),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         ]),
       ),
     );
